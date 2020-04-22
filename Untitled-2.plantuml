@@ -1,6 +1,88 @@
 @startuml
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
-@endum
+|Client|
+start
+repeat 
+    :login;
+|#AntiqueWhite|Server|
+    :authentication;
+repeat while (login succeed?)
+    if(user?) then(yes)
+        :display user_Inteface;
+        |Client|
+            fork 
+            |Client|
+            :request rent;
+                fork
+                :rental permit from server;
+                fork again
+                :request rental reservation;
+                end fork
+                |Server|
+                    fork
+                    :notice Equipments status;
+                    fork again
+                    :check target equipment status;
+                    fork
+                        :data_update;
+                        fork again
+                        :notice permission;
+                        :usage permission;
+                        :notice rental euqipment;
+                        |Administrator|
+                        :checking equipments;
+                        end
+                        |Server|
+                        end fork
+                    end fork
+                |Client|
+                    :usage equipment;
+                    :return equipment;
+                      note right
+                        This activity also attaches 
+                        photos depending on the type of 
+                        equipment being returned.
+                    end note
+                    fork
+                    |Client|
+                        :logout;
+                        end
+                    fork again
+                    |Server|
+                    :register_history;
+                        end
+                    end fork
+            fork again
+            |Client|
+            :request look-up;
+            |Server|
+            :user identification;
+            :display Interface;
+            end
+            end fork 
+    else(no)
+    :display admin_Inteface;
+    |Administrator|    
+        fork
+        |Administrator|
+        :request look-up;
+        |Server|
+        :display admin_Inteface;
+        end
+        fork again
+        |Administrator|
+        :management;
+            fork
+            :register;
+            fork again
+            :check status;
+                note right
+                Check ths status of
+                returned equipments
+                end note
+            end fork
+        end fork
+        |Server|
+        :update_status;
+        end
+    endif
+@enduml
