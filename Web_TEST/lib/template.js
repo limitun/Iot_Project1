@@ -4,11 +4,14 @@ module.exports = {
     <!doctype html>
     <html>
     <head>
-      <title>WEB1 - ${title}</title>
+    <style></style>
+      <title>EMMas</title>
       <meta charset="utf-8">
+      <link type="text/css" rel="stylesheet" href="../css/idx.css">
     </head>
     <body>
-      <h1><a href="/">WEB</a></h1>
+      <h1 class="type1"><a href="/">EMMaS 기자재 정보 관리 시스템</a></h1>
+      
       ${list}
       ${control}
       ${body}

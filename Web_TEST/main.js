@@ -16,7 +16,7 @@ app.get('*', function(request, response, next){
     next();
   });
 });
- 
+
 app.use('/', indexRouter);
 app.use('/topic', topicRouter);
  
@@ -30,5 +30,5 @@ app.use(function (err, req, res, next) {
 });
  
 app.listen(3000, function() {
-  console.log('Example app listening on port 3000!')
+  console.log('EMMAS listening on port 3000')
 });
