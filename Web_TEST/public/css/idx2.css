@@ -1,8 +1,12 @@
 /*배경*/
-body {  background: #232526;  
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background: #232526;  
     background: -webkit-linear-gradient(to right, #414345, #232526);  
     background: linear-gradient(to right, #323436, #232526); 
-    }
+}
 
 /*정렬*/
 
@@ -10,12 +14,91 @@ body {  background: #232526;
 #fdb_msg { text-align: center;}
 
 /*TITLE*/
-h1.type1{ width:100%;height:100%;text-align: center;}
-h1.type1 A:link   { text-decoration: none;color: #FFFFFF; }
-h1.type1 A:visited   { text-decoration: none; color:#FFFFFF; }
-h1.type1 A:active   { text-decoration: none; color: #000000;}
-h1.type1 A:hover   { text-decoration: none; color: #fd5555; }
+header h1.type1{ font-size:large;text-align: center;}
+.type1 A:link   { text-decoration: none;color: #FFFFFF; }
+.type1 A:visited   { text-decoration: none; color:#FFFFFF; }
+.type1 A:active   { text-decoration: none; color: #000000;}
+.type1 A:hover   { text-decoration: none; color: #fd5555; }
+
 
 /*회원가입 메뉴*/
 div > form > p { text-align: center;font-size: small;}
 div > form > p > a.option { text-align: center;font-size: small;color:#AAAABB;}
+
+/*grid layout*/
+nav, article, aside {
+  margin: 2px;
+  border-radius: 0.5em;
+  background-color: #ccc;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+}
+
+
+/* items flex/expand vertically */
+.vbox {
+  display: -webkit-flex;
+  display:    -moz-flex;
+  display:     -ms-flex;
+  display:         flex;
+
+  -webkit-flex-direction: column;
+     -moz-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+
+}
+
+/* items flex/expand horizontally */
+.hbox {
+  display: -webkit-flex;
+  display:    -moz-flex;
+  display:     -ms-flex;
+  display:         flex;
+
+  -webkit-flex-direction: row;
+     -moz-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.space-between {
+  -webkit-justify-content: space-between;
+     -moz-justify-content: space-between;
+      -ms-justify-content: space-between;
+          justify-content: space-between;
+}
+
+footer{
+    text-align: center;color:#AAAABB;
+    font-size:small;
+}
+header, footer {
+    height: 50px;
+  }
+
+.main {
+  -webkit-flex: 1;
+     -moz-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+/*가중치 적용*/
+.flex { flex: 1; }
+.flex2 { flex: 2; }
+.flex3 { flex: 3; }
+.flex4 { flex: 4; }
+.fixed {
+  flex: 0;
+}
+/* utils */
+.right {
+  align-items: flex-end;
+}
+.alert-box {
+  background-color: red; 
+}
+.pad {
+  padding: 10px;
+}

@@ -26,3 +26,4 @@ h1.type1 A:hover   { text-decoration: none; color: #fd5555; }
 /*회원가입 메뉴*/
 div > form > p { text-align: center;font-size: small;}
 div > form > p > a.option { text-align: center;font-size: small;color:#AAAABB;}
+

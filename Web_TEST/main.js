@@ -5,6 +5,8 @@ var bodyParser = require('body-parser');
 var compression = require('compression');
 var helmet = require('helmet')
 app.use(helmet());
+app.use(helmet.xssFilter());
+app.disable("x-powered-by");
 var session = require('express-session')
 var FileStore = require('session-file-store')(session)
 var flash = require('connect-flash');
@@ -47,8 +49,8 @@ app.use(function (err, req, res, next) {
 });
 
 app.listen(80, function () {
-  console.log('Example app listening on port 3000!')
+  console.log('application listening on port 80!')
 });
 
-
+app.disable("x-powered-by");
 /*pm2 start main.js --watch --ignore-watch="data/* sessions/*"  --no-daemon*/
