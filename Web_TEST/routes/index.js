@@ -9,16 +9,10 @@ router.get('/', function (request, response) {
   if(fmsg.success){
     feedback = fmsg.success[0];
   }
-  var title = 'EMMAs<br>';
-  var description = 'Equipment and Materials Management System';
-  var list = template.list(request.list);
-  var html = template.HTML(title, list,
-    `
-      <div style="color:blue;">${feedback}</div>
-      <h2>${title}</h2>${description}
-      `,
-    `<a href="/topic/create">create</a>`,
-    auth.statusUI(request, response)
+  var title = '';
+  var description = '';
+  var html = template.HTML(title,
+      '','/auth/login'
   );
   response.send(html);
 });

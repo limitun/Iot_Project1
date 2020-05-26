@@ -38,13 +38,15 @@ module.exports = function (app) {
                             message: 'Welcome.'
                         });
                     } else {
-                        return done(null, false, {
+                        return done(null, true, {
+                        //return done(null, false, {
                             message: 'Password is not correct.'
                         });
                     }
                 });
             } else {
-                return done(null, false, {
+                //return done(null, false, {
+                return done(null, true, {
                     message: 'There is no email.'
                 });
             }

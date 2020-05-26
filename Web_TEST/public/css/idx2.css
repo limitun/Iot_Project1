@@ -5,13 +5,6 @@ body {  background: #232526;
     }
 
 /*정렬*/
-div.all  { display: table; 
-    border: 2px solid white;
-    padding:15px;
-    position:absolute;
-    top:50%; left:50%;
-    transform: translate(-50%, -50%);
-    }
 
 /*피드백 메시지*/
 #fdb_msg { text-align: center;}
