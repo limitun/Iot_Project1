@@ -19,6 +19,7 @@ out/
 sessions/
 Web_Test/node_modules/
 Web_Test/node.js
+Web_Test/syntax/
 Web_Test/sessions
 Web_Test/*.json
 Web_Test/data
