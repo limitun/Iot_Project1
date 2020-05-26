@@ -11,9 +11,18 @@
 *.class
 
 # Generated files
+Android/EMMAS/*
 bin/
 gen/
 out/
+.vscode/
+sessions/
+Web_Test/node_modules/
+Web_Test/node.js
+Web_Test/sessions
+Web_Test/*.json
+Web_Test/data
+.json
 #  Uncomment the following line in case you need and you don't have the release build type files in your app
 # release/
 
