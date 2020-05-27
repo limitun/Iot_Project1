@@ -20,6 +20,7 @@ header h1.type1{ font-size:large;text-align: center;}
 .type1 A:active   { text-decoration: none; color: #000000;}
 .type1 A:hover   { text-decoration: none; color: #fd5555; }
 
+header { margin:3px;border: 3px solid white;}
 
 /*회원가입 메뉴*/
 div > form > p { text-align: center;font-size: small;}
@@ -29,12 +30,23 @@ div > form > p > a.option { text-align: center;font-size: small;color:#AAAABB;}
 nav, article, aside {
   margin: 2px;
   border-radius: 0.5em;
-  background-color: #ccc;
+  background: -webkit-linear-gradient(to right, #414345, #232526);  
+background: linear-gradient(to right, #526f8b, #4c6572);
   display: flex;
   text-align: center;
   flex-direction: column;
 }
 
+article.flex a{
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: x-large;
+    font-style: bold;
+}
+.flex A:link   { text-decoration: none;color: #000000; }
+.flex A:visited   { text-decoration: none; color:#000000; }
+.flex A:active   { text-decoration: none; color: #000000;}
+.flex A:hover   { text-decoration: none; color: #fd5555; }
 
 /* items flex/expand vertically */
 .vbox {
@@ -101,4 +113,20 @@ header, footer {
 }
 .pad {
   padding: 10px;
+}
+
+/* 테이블 설정*/
+
+table, td, tr, th{
+    font-size:small;
+    color:white;
+}
+
+td.in_use{
+    color:red;
+    background-color: black;
+}
+td.avail{
+    color:greenyellow;
+    background-color: #333333;
 }
