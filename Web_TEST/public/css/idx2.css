@@ -29,9 +29,10 @@ div > form > p > a.option { text-align: center;font-size: small;color:#AAAABB;}
 /*grid layout*/
 nav, article, aside {
   margin: 2px;
+  border: 3px solid white;
   border-radius: 0.5em;
   background: -webkit-linear-gradient(to right, #414345, #232526);  
-background: linear-gradient(to right, #526f8b, #4c6572);
+  background: linear-gradient(to right, #414345, #232526);
   display: flex;
   text-align: center;
   flex-direction: column;
@@ -43,10 +44,13 @@ article.flex a{
     font-size: x-large;
     font-style: bold;
 }
-.flex A:link   { text-decoration: none;color: #000000; }
-.flex A:visited   { text-decoration: none; color:#000000; }
-.flex A:active   { text-decoration: none; color: #000000;}
+.flex A:link   { text-decoration: none;color: #ffffff; }
+.flex A:visited   { text-decoration: none; color:#ffffff; }
+.flex A:active   { text-decoration: none; color: #ffffff;}
 .flex A:hover   { text-decoration: none; color: #fd5555; }
+/*background: linear-gradient(to right, #000000,#ffffff);*/
+
+
 
 /* items flex/expand vertically */
 .vbox {

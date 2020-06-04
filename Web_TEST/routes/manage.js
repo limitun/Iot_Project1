@@ -27,10 +27,10 @@ module.exports = function (passport) {
     var html = template.HTML(title, `<body class="vbox">
     <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
     <section class="main hbox space-between">
-      <article class="flex"><a href="/manage/table">기자재 조회/사용</a></article>
-      <article class="flex"><a href="/manage/">설정관리</a></article>
-    <!--</section>-->
-    <!--<section class="hbox space-between" style="height: 40%">-->
+      <article class="flex"><a href="/manage/table">기자재 조회 및 사용</a></article>
+    </section>
+    <section class="hbox space-between" style="height: 45%">
+      <article class="flex"><a href="/manage/">설정 및 관리</a></article>
     </section>
     
     <footer class="type1"><a href="/manage/table"><br>EMMaS 기자재 정보 관리 시스템</a></footer>

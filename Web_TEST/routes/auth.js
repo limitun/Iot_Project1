@@ -6,6 +6,7 @@ var sanitizeHtml = require('sanitize-html');
 var template = require('../lib/template.js');
 var shortid = require('shortid');
 var db = require('../lib/db');
+
 var bcrypt = require('bcrypt');
 
 module.exports = function (passport) {
