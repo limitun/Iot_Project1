@@ -1,12 +1,6 @@
 var db = require('../lib/db');
 var bcrypt = require('bcrypt');
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-    host    : 'localhost',
-    user    : 'root',
-    password: '1234',
-    database: 'emmas'
-});
+
 
 module.exports = function (app) {
 

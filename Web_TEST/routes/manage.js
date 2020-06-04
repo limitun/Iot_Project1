@@ -7,7 +7,7 @@ var template = require('../lib/template2.js');
 var shortid = require('shortid');
 var db = require('../lib/db');
 var bcrypt = require('bcrypt');
-var mysql = require('mysql');
+/*var mysql = require('mysql');
 var connection = mysql.createConnection({
     host    : 'localhost',
     user    : 'root',
@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
     database: 'emmas'
 });
 
-connection.connect();
+connection.connect(); */
 
 //connection.end();
 /*test assign */
@@ -43,7 +43,7 @@ module.exports = function (passport) {
   router.get('/table', function (request, response) {
     var title = 'manage';
     var list = '';
-    connection.query('SELECT * from equipment ', function(error,results,fields){
+    db.query('SELECT * from equipment ', function(error,results,fields){
       if(error){
         console.log(error);
         var html = template.HTML(title, `<body class="vbox">
