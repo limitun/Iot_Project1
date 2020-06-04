@@ -18,7 +18,7 @@ var connection = mysql.createConnection({
 connection.connect();
 
 //connection.end();
-
+/*test assign */
 
 module.exports = function (passport) {
   router.get('/', function (request, response) {
