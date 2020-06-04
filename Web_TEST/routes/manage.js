@@ -14,20 +14,19 @@ module.exports = function (passport) {
     console.log('/',request.user);
     var title = 'manage';
     var html ='';
-    db.query(`select user_rank from emmas.user where user_number=(select user_number from emmas.signin where id='${request.user}')`, function(error,results,fields){
+    db.query(`select user_rank from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error,results,fields){
       if(error){
           throw error;
       }else{
           var rank=results[0]['user_rank'];
           if(rank>=4){
-      
             html = template.HTML(title, `<body class="vbox">
           <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
           <section class="main hbox space-between">
-            <article class="flex"><a href="/manage/table">기자재 조회 및 사용</a></article>
+            <article class="flex"><a href="/manage/table">기자재 조회</a></article>
           </section>
           <section class="hbox space-between" style="height: 45%">
-            <article class="flex"><a href="/manage/">설정 및 관리</a></article>
+            <article class="flex"><a href="/manage/setting">설정 및 관리</a></article>
           </section>
           
           <footer class="type1"><a href="/manage/"><br>EMMaS 기자재 정보 관리 시스템</a></footer>
@@ -52,7 +51,39 @@ module.exports = function (passport) {
       }
     });    
   });
+  /* setting */
+  router.get('/setting', function (request, response) {
+    var title = 'test';
+    var list = '';
+    var html = template.HTML(title, `<body class="vbox">
+        <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+        <br> setting menu<body>`,
+          '');
+      response.send(html);
+  });
+    /* uses */
+    router.get('/uses', function (request, response) {
+      var title = 'test';
+      var list = '';
+      var html = template.HTML(title, `<body class="vbox">
+          <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+          <br> uses menu<body>`,
+            '');
+        response.send(html);
+    });
 
+    /* board */
+  router.get('/board', function (request, response) {
+    var title = 'test';
+    var list = '';
+    var html = template.HTML(title, `<body class="vbox">
+        <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+        <br> board menu<body>`,
+          '');
+      response.send(html);
+  });
+
+  /* table  */
   router.get('/table', function (request, response) {
     var title = 'manage';
     var list = '';
@@ -69,7 +100,10 @@ module.exports = function (passport) {
         console.log(results);
         var html = template.HTML(title, `<body class="vbox">
         <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
-        ${list}<footer class="type1"><a href="/manage/table">EMMaS 기자재 정보 관리 시스템</a></footer>
+        <section class="main hbox space-between">
+            <article class="flex"><p>menu</p></article>
+        <article class="flex">${list}</article></section>
+        <footer class="type1"><a href="/manage/table">EMMaS 기자재 정보 관리 시스템</a></footer>
         <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
         '');
         response.send(html);

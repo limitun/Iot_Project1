@@ -125,6 +125,9 @@ table, td, tr, th{
     font-size:small;
     color:white;
 }
+table.check{
+  font-size:small;
+}
 
 td.in_use{
     color:red;

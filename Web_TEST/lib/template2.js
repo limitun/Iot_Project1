@@ -22,7 +22,7 @@ module.exports = {
     return list;
   },create_table:function(list){
     var i=0;
-    var tmpt = `<table border="1" collapse:"true"><tr><th>기자재 번호</th><th>분류</th><th>등급</th>
+    var tmpt = `<table class="check" border="1" collapse:"true"><tr><th>기자재 번호</th><th>분류</th><th>등급</th>
     <th>상태</th><th>제조사</th><th>장소</th><th>종류</th>,<th>기자재명</th>
     <th>링크</th>`;
     while(i<list.length){
