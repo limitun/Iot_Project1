@@ -29,7 +29,6 @@ module.exports = function (passport) {
           <a class="option" href = "/auth/login/find_pw">비밀번호 찾기</a>&nbsp;
           <a class="option" href = "/auth/login/signin">회원가입</a>
         </p>
-        <!--<div id="fdb_msg" style="color:red;">${feedback}</div>-->
         <div id="fdb_msg" style="color:red;">${feedback}</div>
       </form>
     `,'/');
@@ -39,8 +38,9 @@ module.exports = function (passport) {
   router.post('/login_process',
     passport.authenticate('local', {
       successRedirect: '/manage',
-      failureRedirect: '/manage',
-      //failureRedirect: '/auth/login',
+      // successRedirect: '/manage',
+      // failureRedirect: '/manage',
+      failureRedirect: '/auth/login',
       failureFlash: true,
       successFlash: true
     })
