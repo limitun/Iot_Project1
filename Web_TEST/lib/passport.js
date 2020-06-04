@@ -15,19 +15,6 @@ module.exports = function (app) {
     });
 
     passport.deserializeUser(function (id, done) {
-        // var user='';
-        // db.query(`SELECT user_number from sigin where id='${id}'`, function(error,results,fields){
-        //     if(error){
-        //         console.log('a');
-        //         return done(null, true, {
-        //             message: 'There is no ID.'
-        //         });
-        //     }else{
-        //         console.log('b');
-        //         user= results[0]['user_number'];
-        //     }
-        //   });
-        // console.log('deserializeUser', user);
         done(null, id);
     });
 
@@ -40,10 +27,13 @@ module.exports = function (app) {
             db.query(`SELECT ID,PW from emmas.signin where ID='${id}';`, function(error,results,fields){
                 if(error){
                     return done(null, false, {
-                        message: 'There is no ID.'
+                        message: 'Incorrect id entered..'
                     });
                 }else{
-                    console.log(results);
+                    console.log(results.length);
+                    if(results.length==0){
+                        return done(null,false,'Incorrect id entered.');
+                    }
                     var id = results[0]['ID'];
                     var pw = results[0]['PW'];
                     pw =  bcrypt.hashSync(pw,10);
