@@ -24,7 +24,7 @@ module.exports = function (app) {
         },
         function (id, pwd, done) {
             console.log('LocalStrategy', id, pwd);
-            db.query(`SELECT ID,PW from emmas.signin where ID='${id}';`, function(error,results,fields){
+            db.query(`SELECT ID,PW from emmas.signin where ID=?;`,[id], function(error,results,fields){
                 if(error){
                     return done(null, false, {
                         message: 'Incorrect id entered..'
