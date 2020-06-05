@@ -44,10 +44,16 @@ article.flex a{
     font-size: x-large;
     font-style: bold;
 }
+.flex:hover{background: -webkit-linear-gradient(to right, #ffffff, #232526);  
+  background: linear-gradient(to right, #ffffff, #232526);}
 .flex A:link   { text-decoration: none;color: #ffffff; }
 .flex A:visited   { text-decoration: none; color:#ffffff; }
 .flex A:active   { text-decoration: none; color: #ffffff;}
 .flex A:hover   { text-decoration: none; color: #fd5555; }
+.flex5 A:link   { text-decoration: none;color: #ffffff; }
+.flex5 A:visited   { text-decoration: none; color:#ffffff; }
+.flex5 A:active   { text-decoration: none; color: #ffffff;}
+.flex5 A:hover   { text-decoration: none; color: #fd5555; }
 /*background: linear-gradient(to right, #000000,#ffffff);*/
 
 
@@ -105,6 +111,7 @@ header, footer {
 .flex2 { flex: 2; }
 .flex3 { flex: 3; }
 .flex4 { flex: 4; }
+.flex5 { flex: 4; }
 .fixed {
   flex: 0;
 }
@@ -133,9 +140,6 @@ table.check tr td a:visited   { text-decoration: none; color:#ffffff; }
 table.check tr td a:active   { text-decoration: none; color: #ffffff;}
 table.check tr td a:hover   { text-decoration: none; color: #fd5555; }
 
-
-
-
 td.in_use{
     color:red;
     background-color: black;
@@ -144,3 +148,36 @@ td.avail{
     color:greenyellow;
     background-color: #333333;
 }
+
+.flex5 {
+  background-color: white;
+  color: black;
+}
+.flex5 table.board{
+  text-align: left;
+  margin: 1px;
+  border-collapse: collapse;
+}
+.flex5 table.board th{
+  text-align: center;
+  border-top: 1px solid white;
+}
+.flex5 table.board td{
+  text-align: center;
+  border-top: 1px solid white;
+}
+div.nav_menu{
+  list-style: none;
+  text-align: center;
+  padding: 10px 0;
+}
+/* div.nav_menu:hover{background: -webkit-linear-gradient(to right, #000000, #000000);  
+  background: linear-gradient(to right, #000000, #000000);} */
+div.nav_menu li{
+font-size:small;
+/* text-transform: uppercase; */
+padding: 0 10px;
+letter-spacing:10px;
+}
+div.nav_menu li a { font-size:small;text-decoration: none; color: #ffffff;}
+div.nav_menu li a:hover { font-size:small;text-decoration: underline;}
