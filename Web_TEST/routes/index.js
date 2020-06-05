@@ -11,10 +11,22 @@ router.get('/', function (request, response) {
   }
   var title = '';
   var description = '';
-  var html = template.HTML(title,
-      '','/auth/login'
-  );
-  response.send(html);
+  if(auth.isOwner(request)==true){
+    // var html = template.HTML(title,
+    //   '','/manage' );
+    // response.send(html);
+    response.redirect('/manage');
+  }else{
+    if(fmsg.info){
+      var html = template.HTML(title,
+        '<script type="text/javascript">alert("만료된 세션입니다.\n다시 로그인하십시오.");</script>','/auth/login');
+      response.send(html);  
+    }else{
+      var html = template.HTML(title,
+        '','/auth/login');
+      response.send(html);
+    }
+  }
 });
 
 module.exports = router;

@@ -9,13 +9,13 @@ module.exports = function (app) {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    passport.serializeUser(function (id, done) {
-        console.log('serializeUser', id);
-        done(null, id);
+    passport.serializeUser(function (user, done) {
+        console.log('serializeUser', user);
+        done(null, user);
     });
 
-    passport.deserializeUser(function (id, done) {
-        done(null, id);
+    passport.deserializeUser(function (user, done) {
+        done(null, user);
     });
 
     passport.use(new LocalStrategy({
@@ -30,14 +30,14 @@ module.exports = function (app) {
                         message: 'Incorrect id entered..'
                     });
                 }else{
-                    console.log(results.length);
+                    // console.log(results.length);
                     if(results.length==0){
                         return done(null,false,'Incorrect id entered.');
                     }
                     var id = results[0]['ID'];
                     var pw = results[0]['PW'];
                     pw =  bcrypt.hashSync(pw,10);
-                    console.log(pwd,pw);
+                    // console.log(pwd,pw);
                     bcrypt.compare(pwd, pw, function(err,result){
                         if(result){
                             return done(null, id, {

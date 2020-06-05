@@ -125,9 +125,16 @@ table, td, tr, th{
     font-size:small;
     color:white;
 }
-table.check{
+table.check tr td a{
   font-size:small;
 }
+table.check tr td a:link   { text-decoration: none;color: #ffffff; }
+table.check tr td a:visited   { text-decoration: none; color:#ffffff; }
+table.check tr td a:active   { text-decoration: none; color: #ffffff;}
+table.check tr td a:hover   { text-decoration: none; color: #fd5555; }
+
+
+
 
 td.in_use{
     color:red;

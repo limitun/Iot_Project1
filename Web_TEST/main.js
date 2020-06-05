@@ -40,7 +40,7 @@ app.use('/auth', authRouter);
 app.use('/manage', manageRouter);
 
 app.use(function (req, res, next) {
-  res.status(404).send('Sorry cant find that!');
+  res.status(404).send('지정된 페이지를 찾을 수 없습니다.');
 });
 
 app.use(function (err, req, res, next) {
