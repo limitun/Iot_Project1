@@ -43,6 +43,10 @@ module.exports = function (passport) {
           <section class="main hbox space-between">
             <article class="flex"><a href="/manage/table">기자재 조회 및 사용</a></article>
           </section>
+          <section class="main hbox space-between">
+            <article class="flex"><a href="/manage/board">건의사항 게시판</a></article>
+            <article class="flex"><a href="/manage/setting">사용자 정보 관리</a></article>
+          </section>
           
           <footer class="type1"><a href="/manage/table"><br>EMMaS 기자재 정보 관리 시스템</a></footer>
           <footer class="type1"><a href="/manage/logout">로그아웃</a></footer>

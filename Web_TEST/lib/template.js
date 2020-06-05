@@ -14,7 +14,7 @@ module.exports = {
       <hr><hr>
         <h1 class="type1"><a href="${domain}">EMMaS 기자재 정보 관리 시스템</a></h1>
         <hr>
-        
+  
         <hr>
         ${body}
       </div>

@@ -20,8 +20,8 @@ app.use(compression());
 app.use(session({
   secret: 'asadlfkj!@#!@#dfgasdg',
   resave: false,
-  saveUninitialized: true,
-  store: new FileStore()
+  store: new FileStore(),
+  saveUninitialized: true
 }))
 app.use(flash());
 
