@@ -49,5 +49,13 @@ module.exports = {
       i=i+1;
     }tmpt= tmpt+'</table>';
     return tmpt;
+  },create_menu:function(rank){
+    var i=0;
+    tmpt='';
+    if(rank>=4){
+
+    }else{
+
+    }
   }
 }
