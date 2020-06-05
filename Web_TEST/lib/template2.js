@@ -6,6 +6,11 @@ module.exports = {
     <head>
       <style></style>
       <link type="text/css" rel="stylesheet" href="../css/idx2.css">
+      <script type="text/javascript">
+        function back_board(){
+          window.history.back();
+        }
+      </script>
       <title>EMMas</title>
       <meta charset="utf-8">
     </head>
