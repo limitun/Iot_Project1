@@ -96,10 +96,18 @@ insert into emmas.equipment (eq_type,eq_RANK,eq_status,acquisition,manufacturer,
 values ('opertation',0,'available','2020-01-01','T1LS','IP:220.68.27.130, GPU:Titanx*4','서버실(151-225)','computer','Server5');
 insert into emmas.equipment (eq_type,eq_RANK,eq_status,acquisition,manufacturer,note,location,categori,eq_name) 
 values ('opertation',0,'available','2020-04-18','G1','IP:220.68.27.130, GPU:RTX2080Ti*2','서버실(151-225)','computer','Server6');
+insert into emmas.equipment (eq_type,eq_RANK,eq_status,acquisition,manufacturer,note,location,categori,eq_name) 
+values ('opertation',3,'available','2020-06-06','G1','IP:220.68.27.255, GPU:RTX2080Ti*2','서버실(151-225)','computer','Server7');
 
 #sample log
 
 
-
+#sample req_board
+insert into emmas.req_board (id_board,title,descript,edit_date,user_number,response_id)
+values (1,'사용 불가능한 ID','ID가 사용불가능하다고 나옵니다.','2020-06-05',1,null);
+insert into emmas.req_board (id_board,title,descript,edit_date,user_number,response_id)
+values (2,'220 서버 확인 부탁드립니다.','220 서버가 다운되었습니다. 확인 해주세요.','2020-06-06',8,null);
+insert into emmas.req_board (id_board,title,descript,edit_date,user_number,response_id)
+values (1,'사용 불가능한 ID','ID가 사용불가능하다고 나옵니다.','2020-06-05',1,null);
 
 

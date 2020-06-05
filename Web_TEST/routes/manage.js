@@ -138,34 +138,48 @@ module.exports = function (passport) {
           throw error2;
         }else{
           var rank=results2[0]['user_rank'];
-          fs.readdir('./data', function(error, filelist){
-            var i = 0;
-            var list = '<table class="board">'
-            +'<colgroup><col style="width:10%;">'
-            +'<col style="width:50%;">'
-            +'<col style="width:30%;">'
-            +'<col style="width:10%;"></colgroup>'
-            +'<tr><th class="no">No.</th><th>제목</th><th>게시일</th><th>답변</th></tr>';
+          db.query(`select * from emmas.req_board as r left JOIN user as u ON  r.user_number=u.user_number;`, function(error,results,fields){
+            if(error){
+              throw error;
+            }else{
+              var i = 0;
+              var list = '<table class="board">'
+              +'<colgroup><col style="width:7%;">'
+              +'<col style="width:*%;">'
+              +'<col style="width:30%;">'
+              +'<col style="width:10%;">'
+              +'<col style="width:10%;"></colgroup>'
+              +'<tr><th class="no">No.</th><th>제목</th><th>게시일</th><th>작성자</th><th>답변</th></tr>';
 
-            while(i < filelist.length){
-              list = list + `<tr><td>${i+1}</td><td><a href="/manage/board/${filelist[i]}">${filelist[i]}</li></td>`+
-                            `<td></td><td></td></tr>`;
-              i = i + 1;
+              while(i < results.length){
+                var t1 = results[i]['title'];
+                var t2 = results[i]['edit_date'];
+                var t3 = results[i]['userName'];
+                // console.log(t2);
+                var t4 = results[i]['response_id'];
+                var answer = 'yes';
+                if(t4==null){
+                  answer='no';
+                }
+                list = list + `<tr><td>${i+1}</td><td><a href="/manage/board/${t1}">${t1}</a></td>`+
+                          `<td>${t2}</td><td>${t3}</td><td class="no">${answer}</td></tr>`;  
+                i = i + 1;
+              }
+              list = list+'</table><p></p><p><a href="/manage/create">요청사항 작성</a></p>';
+              menu_list = template.create_menu(rank);
+              var html = template.HTML(title, `<body class="vbox">
+              <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+              <section class="main hbox space-between">
+                  <article class="flex1" >
+                  ${menu_list}
+                  </article>
+              <article class="flex5">${list}</article></section>
+              <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
+              <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
+              '');
+              response.send(html);
             }
-            list = list+'</table><p><a href="/manage/create">요청사항 작성</a>';
-            menu_list = template.create_menu(rank);
-            var html = template.HTML(title, `<body class="vbox">
-            <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
-            <section class="main hbox space-between">
-                <article class="flex1" >
-                ${menu_list}
-                </article>
-            <article class="flex5">${list}</article></section>
-            <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
-            <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
-            '');
-            response.send(html);
-          });
+            });
           }
       });
     }else{
@@ -183,34 +197,31 @@ module.exports = function (passport) {
           throw error2;
         }else{
           var rank=results2[0]['user_rank'];
-          fs.readdir('./data', function(error, filelist){
-            var i = 0;
-            // var list = `<form action="/manage/create_process" method="post">
-            var list = `<form>
-            <p> 요청사항 </p>
-            <p><input type="text" name="title" placeholder="title"></p>
-            <p> 내용 </p>
-            <p>
-              <textarea name="description" placeholder="description"></textarea>
-            </p>
-            
-            <p>
-              <input type="button" value="제출" onclick="submit"><input type="button" value="취소" onclick="back_board();">
-            </p>
-          </form>`;
-            menu_list = template.create_menu(rank);
-            var html = template.HTML(title, `<body class="vbox">
-            <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
-            <section class="main hbox space-between">
-                <article class="flex1" >
-                ${menu_list}
-                </article>
-            <article class="flex5">${list}</article></section>
-            <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
-            <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
-            '');
-            response.send(html);
-          });
+          var i = 0;
+          // var list = `<form action="/manage/create_process" method="post">
+          var list = `<form>
+          <p> 요청사항 </p>
+          <p><input type="text" name="title" placeholder="title"></p>
+          <p> 내용 </p>
+          <p>
+            <textarea name="description" placeholder="description"></textarea>
+          </p>
+          <p>
+            <input type="button" value="제출" onclick="submit"><input type="button" value="취소" onclick="back_board();">
+          </p>
+        </form>`;
+          menu_list = template.create_menu(rank);
+          var html = template.HTML(title, `<body class="vbox">
+          <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+          <section class="main hbox space-between">
+              <article class="flex1" >
+              ${menu_list}
+              </article>
+          <article class="flex5">${list}</article></section>
+          <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
+          <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
+          '');
+          response.send(html);
           }
       });
     }else{
