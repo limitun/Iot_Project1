@@ -232,6 +232,37 @@ module.exports = function (passport) {
       response.redirect('/auth/login');
     }
   });
+  /* setting */
+  router.get('/setting', function (request, response) {
+    var title = 'test';
+    var list = '';
+    var html = template.HTML(title, `<body class="vbox">
+        <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+        <br> setting menu<body>`,
+          '');
+      response.send(html);
+  });
+    /* uses */
+    router.get('/uses', function (request, response) {
+      var title = 'test';
+      var list = '';
+      var html = template.HTML(title, `<body class="vbox">
+          <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+          <br> uses menu<body>`,
+            '');
+        response.send(html);
+    });
+
+    /* board */
+  router.get('/board', function (request, response) {
+    var title = 'test';
+    var list = '';
+    var html = template.HTML(title, `<body class="vbox">
+        <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+        <br> board menu<body>`,
+          '');
+      response.send(html);
+  });
 
   router.get('/manage/board/:id',(request,response)=>{
       var id = request.params.id;
@@ -246,6 +277,7 @@ module.exports = function (passport) {
   router.post('/create_process',
     
   );
+
   /* table  */
   router.get('/table', function (request, response) {
     var title = 'manage';
