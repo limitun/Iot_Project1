@@ -108,6 +108,8 @@ values (1,'사용 불가능한 ID','ID가 사용불가능하다고 나옵니다.
 insert into emmas.req_board (id_board,title,descript,edit_date,user_number,response_id)
 values (2,'220 서버 확인 부탁드립니다.','220 서버가 다운되었습니다. 확인 해주세요.','2020-06-06',8,null);
 insert into emmas.req_board (id_board,title,descript,edit_date,user_number,response_id)
-values (1,'사용 불가능한 ID','ID가 사용불가능하다고 나옵니다.','2020-06-05',1,null);
+values (3,'테스트 중입니다.','테스트를 하고자 합니다.','2020-06-07',4,null);
+insert into emmas.req_board (id_board,title,descript,edit_date,user_number,response_id)
+values (4,'테스트 중입니다:re.','테스트를 하고자 합니다. \n 답변:테스트 완료했습니다. 01024891495','2020-06-07',1,1);
 
 

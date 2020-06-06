@@ -170,6 +170,9 @@ td.avail{
 .flex5 table.board td.no{
   color: red;
 }
+.flex5 table.board td.yes{
+  color: lightgreen;
+}
 div.nav_menu{
   list-style: none;
   text-align: center;
@@ -185,3 +188,5 @@ letter-spacing:10px;
 }
 div.nav_menu li a { font-size:small;text-decoration: none; color: #ffffff;}
 div.nav_menu li a:hover { font-size:small;text-decoration: underline;}
+
+
