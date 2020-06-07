@@ -30,7 +30,6 @@ module.exports = function (passport) {
           <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
           <section class="main hbox space-between">
             <article class="flex"><a href="/manage/table">기자재 조회/관리</a></article>
-            <article class="flex"><a href="/manage/setting">환경 설정</a></article>
           </section>
           <section class="hbox space-between" style="height: 45%">
           <article class="flex"><a href="/manage/board">요청 사항</a></article>
@@ -56,7 +55,6 @@ module.exports = function (passport) {
           </section>
           <section class="main hbox space-between">
             <article class="flex"><a href="/manage/board">요청 사항</a></article>
-            <article class="flex"><a href="/manage/setting">환경 설정</a></article>
           </section>
           
           <footer class="type1"><a href="/manage"><br>EMMaS 기자재 정보 관리 시스템</a></footer>
@@ -144,6 +142,51 @@ module.exports = function (passport) {
         response.redirect('/auth/login');
       }
     });
+    /*mgmt */
+    router.get('/mgmt', function (request, response) {
+      var _url = request.url;
+      var queryData = url.parse(_url,true).query;
+      var str_arr = queryData.id.split(':');
+      console.log(str_arr);
+      var title= '';
+      if(auth.isOwner(request)==true){
+        case1= "management";
+        var filepath="./log/";
+        var time = new Date().toLocaleString();
+        var str = time.replace(/:/gi,'_');
+        var t = true;
+        var i= str_arr[0];
+        var j= str_arr[1];
+        var msg1= str_arr[2];
+        var filename='log_'+str+'_'+i+'_'+j+'_'+case1+'.log';
+        sql = `insert into emmas.log (log_date, user_user_number,equipment_eq_number, log_case, log_file)
+        values ('${time}', ${i}, ${j}, '${case1}', '${filename}');
+        `;
+        db.query(sql,function(err,results,fileds){
+            if(err){
+                console.log(err);
+                t=false;
+            }else{
+            console.log(str);
+            }
+        });
+        if(t){
+            var fs=require('fs');
+            var data = `userNumber: ${i} equipNumber:${j} log : ${time}, ${case1} 에 대한 관리 기록입니다. \n ${msg1}`;       
+            fs.writeFile(filepath+filename, data,'utf8', function(err, data) { console.log(data); }); 
+            t=true;
+        }
+        sql = `update emmas.equipment set eq_status='management' where eq_number=${j}`;
+        db.query(sql,function(err,results,fileds){
+          if(err) console.log(err);
+          });
+        
+        response.redirect(`/manage/table`);
+      }else{
+        request.flash('info', 'expired session');
+        response.redirect('/auth/login');
+      }
+    });
     /* rtrn */
     router.get('/rtrn', function (request, response) {
       var _url = request.url;
@@ -223,7 +266,7 @@ module.exports = function (passport) {
                 if(t4==null){
                   answer='no';
                 }
-                list = list + `<tr><td>${t5}</td><td><a href="/manage/board/content?id=${t5}">${t1}</a></td>`+
+                list = list + `<tr><td>${t5}</td><td><a href="#" onclick="popup2('/manage/board/content?id=${t5}:${rank}');">${t1}</a></td>`+
                           `<td>${t2}</td><td>${t3}</td><td class="${answer}">${answer}</td></tr>`;  
                 i = i + 1;
               }
@@ -250,24 +293,117 @@ module.exports = function (passport) {
     }
   });
   router.get('/board/content',function(request,response){
-    var title='';
-    var menu_list='';
-    var _url = request.url;
+      var _url = request.url;
       var queryData = url.parse(_url,true).query;
+      var s_id = queryData.id.split(":");
     if(auth.isOwner(request)==true){
-      db.query()
+      db.query(`select * from emmas.req_board as r where r.id_board = ?`,[s_id[0]], function(error1,results1, fileds1){
+        if(error1){
+          throw error1;
+        }
+        var title=results1[0]['title'];
+        var description = results1[0]['descript'];
+        var id = results1[0]['id_board'];
+        var edit_date = results1[0]['edit_date'];
+        var Q_A = description.split("답변:");
+        if(Q_A.length==2){
+          var html=template.HTML(title,`<body class="vbox">
+        <section class="main hbox space-between">
+          <article class="flex"><a href="/manage/setting">제목 : ${title}</a></article>
+        </section>
+        <section class="hbox space-between" style="height: 45%">
+        <article class="flex">작성 날짜 : ${edit_date}</article>
+        <article class="flex">작성 내용 : ${Q_A[0]}</article>
+        <article class="flex">답변 내용 : ${Q_A[1]}</article>
+        <article class="flex"><p> <input type="button" value="취소" onclick="close_board();">
+      </p></article>
+        </section>
+        `,'');
+        }
+        else{
+          var btn1 ='';
+          if(s_id[1]==4){
+            btn1 =`<p>
+            <textarea id="textarea" rows="5" cols="50" onKeyUp="keyup()"></textarea>
+            </p>
+            <p>
+            <input type="button" value="답변" onclick="up_load('${id}','${description}');">
+            <input type="button" value="취소" onclick="close_board();">
+          </p>`;
+          }
+        var html=template.HTML(title,`<body class="vbox">
+        <section class="main hbox space-between">
+          <article class="flex">제목 : ${title}</article>
+        </section>
+        <section class="hbox space-between" style="height: 45%">
+        <article class="flex">작성 날짜 : ${edit_date}</article>
+        <article class="flex">작성 내용 : ${description}</article>
+        <article class="flex">${btn1}</article>
+        </section>
+        `,'');
+        }
+        response.send(html);
+      });
 
     }else{
       request.flash('info', 'expired session');
       response.redirect('/auth/login');
     }
   });
+  /*board_Question*/
+  router.get('/create_process', function (request, response) {
+    var _url = request.url;
+    var queryData = url.parse(_url,true).query;
+    var str_arr = queryData.id.split('-n');
+    var t1 = str_arr[1].split(':');
+    
+    if(auth.isOwner(request)==true){
+      var t = true;
+      var time = new Date().toLocaleString();
+      // insert into emmas.req_board (title,descript,edit_date,user_number,response_id)
+      // values ('제목입니다.','내용입니다.','2020-06-08',4,null);
+      sql = `insert into emmas.req_board (title,descript,edit_date,user_number,response_id)
+      values ('${t1[0]}','${t1[1]}','${time}',${str_arr[0]},null);`;
+      db.query(sql,function(err,results,fileds){
+        if(err) console.log(err);
+        });
+      response.header(200);
+      response.send('<script type="text/javascript">alert("요청되었습니다.");self.close();</script>');
+    }else{
+      request.flash('info', 'expired session');
+      response.redirect('/auth/login');
+    }
+  });
+  /*board_answer*/
+  router.get('/create_b', function (request, response) {
+    var _url = request.url;
+    var queryData = url.parse(_url,true).query;
+    var str_arr = queryData.id.split('-n');
+    
+    if(auth.isOwner(request)==true){
+      var t = true;
+      sql = `update emmas.req_board set descript='${str_arr[1]}' where id_board=${str_arr[0]}`;
+      db.query(sql,function(err,results,fileds){
+        if(err) console.log(err);
+        });
+      sql = `update emmas.req_board set response_id=1 where id_board=${str_arr[0]}`;
+      db.query(sql,function(err,results,fileds){
+          if(err) console.log(err);
+          });
+      response.header(200);
+      response.send('<script type="text/javascript">alert("답변을 완료하였습니다.");self.close();</script>');
+    }else{
+      request.flash('info', 'expired session');
+      response.redirect('/auth/login');
+    }
+  });
+
   /*board_create */
   router.get('/create',function (request, response){
     var title='';
     var menu_list='';
     if(auth.isOwner(request)==true){
-      db.query(`select user_rank from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error2,results2,fields2){
+      db.query(`select * from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error2,results2,fields2){
         if(error2){
           throw error2;
         }else{
@@ -276,13 +412,13 @@ module.exports = function (passport) {
           // var list = `<form action="/manage/create_process" method="post">
           var list = `<form>
           <p> 요청사항 </p>
-          <p><input type="text" name="title" placeholder="title"></p>
+          <p><input type="text" id="title2" size="50" placeholder="title"></p>
           <p> 내용 </p>
           <p>
-            <textarea name="description" placeholder="description"></textarea>
+            <textarea id="textarea" rows="20" cols="80" onKeyUp="keyup()"></textarea>
           </p>
           <p>
-            <input type="button" value="제출" onclick="submit"><input type="button" value="취소" onclick="back_board();">
+            <input type="button" value="요청" onclick="up_load2('${results2[0]['user_number']}');"><input type="button" value="취소" onclick="back_board();">
           </p>
         </form>`;
           menu_list = template.create_menu(rank);
@@ -309,24 +445,32 @@ module.exports = function (passport) {
     var title='';
     var menu_list='';
     if(auth.isOwner(request)==true){
-      db.query(`select user_rank from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error2,results2,fields2){
+      db.query(`select * from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error2,results2,fields2){
         if(error2){
           throw error2;
         }else{
-          var rank=results2[0]['user_rank'];
+          var rank=results2[0]['user_RANK'];
           var i = 0;
-          // var list = `<form action="/manage/create_process" method="post">
-          var list = `<form>
-          <p> 기자재명 </p>
-          <p><input type="text" name="title" placeholder="title"></p>
-          <p> 내용 </p>
-          <p>
-            <textarea name="description" placeholder="description"></textarea>
-          </p>
-          <p>
-            <input type="button" value="제출" onclick="submit"><input type="button" value="취소" onclick="back_board();">
-          </p>
-        </form>`;
+//           // var list = `<form action="/manage/create_process" method="post">
+//           insert into emmas.equipment (eq_type,eq_RANK,eq_status,acquisition,manufacturer,note,location,categori,eq_name) 
+// values ('opertation',0,'in_use','2020-06-03','Super','IP:220.68.27.255, 로그파일 기록용','CVML 연구실','computer','Test_Se_LOG');
+          var list = `<div class="box"><form action="/manage/regist_process" method="post"><table><tr>
+          <td> 기자재 타입 </td>
+          <td><input type="text" id="type" value="opertation"></td></tr><tr> 
+          <td> 기자재명 </td>
+          <td><input type="text" id="name" value="테스트 기자재"></td></tr><tr>
+          <td> 기자재 등급 </td>
+          <td><input type="text" id="ranki" value="3"></td></tr><tr>
+          <td> 제조사 </td>
+          <td><input type="text" id="manu" value="삼성"></td></tr><tr>
+          <td> 비고 </td>
+          <td><input type="text" id="note" value="테스트용으로 생성"></td></tr><tr>
+          <td> 장소 </td>
+          <td><input type="text" id="locat" value="디지털정보관 151-101호실"></td></tr><tr>
+          <td> 분류 </td>
+          <td><input type="text" id="cate" value="computer"></td></tr>
+          <tr><td><input type="button" value="제출" onclick="up_load3(${results2[0]['user_number']});"></td><td><input type="button" value="취소" onclick="back_board();"></td></tr></table>
+        </form></div>`;
           menu_list = template.create_menu(rank);
           var html = template.HTML(title, `<body class="vbox">
           <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
@@ -334,7 +478,7 @@ module.exports = function (passport) {
               <article class="flex1" >
               ${menu_list}
               </article>
-          <article class="flex5">${list}</article></section>
+          <article class="flex3">${list}</article></section>
           <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
           <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
           '');
@@ -346,17 +490,34 @@ module.exports = function (passport) {
       response.redirect('/auth/login');
     }
   });
-
-  router.post('/create_process',
+  router.get('/regist_process', function (request,response){
+    var _url = request.url;
+    var queryData = url.parse(_url,true).query;
     
-  );
+    if(auth.isOwner(request)==true){
+      var str = queryData.id.split(':');
+      var time = new Date().toLocaleString();
+      // console.log(str1);
+      sql = `insert into emmas.equipment (eq_type,eq_RANK,eq_status,acquisition,manufacturer,note,location,categori,eq_name) `+
+         `values ('${str[1]}',${str[2]},'available','${time}','${str[3]}','${str[4]}','${str[5]}','${str[6]}','${str[7]}');`;
+      db.query(sql,function(err,results,fields){
+        if(err) throw err;
+      });
+      response.redirect('/manage/table');
+    }else{
+      request.flash('info', 'expired session');
+      response.redirect('/auth/login');
+    }
+});
+
+
   /* table  */
   router.get('/table', function (request, response) {
     var title = 'manage';
     var list = '';
     var menu_list='';
     if(auth.isOwner(request)==true){
-    db.query('SELECT * from equipment ', function(error1,results1,fields1){
+    db.query('SELECT * from equipment order by eq_status', function(error1,results1,fields1){
       if(error1){
         console.log(error1);
         var html = template.HTML(title, `<body class="vbox">

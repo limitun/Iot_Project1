@@ -6,11 +6,44 @@ module.exports = {
     <head>
       <style></style>
       <link type="text/css" rel="stylesheet" href="../css/idx2.css">
+      <link type="text/css" rel="stylesheet" href="./css/idx2.css">
       <script type="text/javascript">
         function back_board(){
           window.history.back();
         }
-        
+        function up_load(id,msg){
+          var str=document.getElementById("textarea").value;
+          var url = "http://vision20.ga/manage/create_b?id="+id+"-n"+msg+"re: 답변:"+str;
+          location.href=url;
+        }
+        function up_load2(id){
+          var str=document.getElementById("textarea").value;
+          var title=document.getElementById("text").value;
+          var option = "width = 600, height = 600, top = 100, left = 200, location = no";
+          var url = "http://vision20.ga/manage/create_process?id="+id+"-n"+title+":"+str;
+          alert('요청되었습니다.');
+          window.open(url,name,option).self.close();
+          location.href="http://vision20.ga/manage/board";
+        }
+        function up_load3(id){//type,name,ranki,manu,note,locat,cate
+          var str1=document.getElementById("type").value;
+          var str2=document.getElementById("ranki").value;
+          var str3=document.getElementById("manu").value;
+          var str4=document.getElementById("note").value;
+          var str5=document.getElementById("locat").value;
+          var str6=document.getElementById("cate").value;
+          var str7=document.getElementById("name").value;
+          var option = "width = 600, height = 600, top = 100, left = 200, location = no";
+          var name = "regist_eq";
+          var url = "http://vision20.ga/manage/regist_process?id="+id+":"+str1+":"+str2+":"+str3+":"+str4+":"+str5+":"+str6+":"+str7;
+          alert('등록되었습니다.');
+          
+          window.open(url,name,option).self.close();
+          location.href="http://vision20.ga/manage/table";
+        }
+        function close_board(){
+          window.close();
+        }
         function keyup(){
           var str;
           var length;
@@ -20,6 +53,11 @@ module.exports = {
             cleartext();
           }
         }
+        function popup2(url){
+          var name = "Equipment Board";
+          var option = "width = 600, height = 600, top = 100, left = 200, location = no"
+          window.open(url, name, option);
+      }
         function popup(lg_filename){
             var url = "http://vision20.ga/manage/inform/log?id="+lg_filename;
             var name = "Equipment log";
@@ -41,6 +79,15 @@ module.exports = {
           var name="rtrn";
           window.open(url,name,option).self.close();
           alert('반납하였습니다.');
+          location.reload(true);
+        }
+        function mgmt(user_number,eq_number){
+          var msg = document.getElementById("textarea").value;
+          var url = "http://vision20.ga/manage/mgmt?id="+user_number+":"+eq_number+":"+msg;
+          var option = "width = 500, height = 500, location=no";
+          var name="mgmt";
+          window.open(url,name,option).self.close();
+          alert('기록하였습니다.');
           location.reload(true);
         }
         function gen_qr(str,size){
@@ -129,12 +176,10 @@ module.exports = {
       +'<li><a href="/manage/regist">기자재 등록</a></li><hr>'
       +'<li><a href="/manage/board">요청사항</a></li><hr>'
       // +'<li><a href="/manage/qrcode">QR코드생성</a></li><hr>'
-      +'<li><a href="/">한 눈에 보기</a></li><hr></ul>'
-      +'<li><a href="/manage/setting">환경설정</a></li><hr>';
+      +'<li><a href="/">한 눈에 보기</a></li><hr></ul>';
     }else{
       tmpt=tmpt+'<li><a href="/manage/table">기자재 조회</a></li><hr>'
-      +'<li><a href="/manage/board">요청사항</a></li><hr>'
-      +'<li><a href="/manage/setting">환경설정</a></li><hr></ul>';
+      +'<li><a href="/manage/board">요청사항</a></li><hr>';
     }
     return tmpt;
   },create_infm:function(list,list2,eq_log){
@@ -188,7 +233,7 @@ module.exports = {
             <textarea id="textarea" rows="5" cols="50" onKeyUp="keyup()" placeholder="관리 내역을 작성하여 주십시오."></textarea>
           </p>
           <p>
-            <input type="button" value="관리 기록" onclick="submit();">
+            <input type="button" value="관리 기록" onclick="mgmt(${list2[0]['user_number']},${list[0]['eq_number']});">
             
             <input type="button" value="취소" onclick="back_board();">
           </p>

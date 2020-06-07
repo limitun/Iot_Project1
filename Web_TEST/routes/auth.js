@@ -10,6 +10,7 @@ var db = require('../lib/db');
 
 var bcrypt = require('bcrypt');
 
+
 module.exports = function (passport) {
   router.get('/login', function (request, response) {
     var fmsg = request.flash();
