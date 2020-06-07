@@ -344,7 +344,7 @@ module.exports = function (passport) {
           '');
         response.send(html);
       }else{
-        db.query(`select user_rank from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error2,results2,fields2){
+        db.query(`select * from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error2,results2,fields2){
           if(error2){
             throw error2;
           }else{
@@ -387,6 +387,43 @@ module.exports = function (passport) {
       response.redirect('/auth/login');
     }
   });
+  router.get('/')
+  /*view log*/
+  router.get('/inform/log', function (request,response){
+    var _url = request.url;
+    var queryData = url.parse(_url,true).query;
+    if(auth.isOwner(request)==true){
+      db.query(`select user_rank from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error2,results2,fields2){
+        if(error2){
+          throw error2;
+        }else{
+          var rank=results2[0]['user_rank'];
+          var title=queryData.id;
+          var i = 0;
+          var list = 'settings';
+          menu_list = template.create_menu(rank);
+          fs.readFile(`./log/${queryData.id}`,'utf-8',(error,data)=>{
+            if(error){
+              console.log(error);
+              response.status(500).send('잘못된 접근입니다.');
+            }else{
+              var html = template.HTML(title, `<body class="vbox">
+              <section class="main hbox space-between">
+                  <article class="flex1" >
+                  ${data}
+                  </article>`,
+              '');
+              response.send(html);
+            }
+            
+          });
+        }
+      });
+    }else{
+      request.flash('info', 'expired session');
+      response.redirect('/auth/login');
+    }
+});
 
   router.get('/logout', function (request, response) {
     request.logout();

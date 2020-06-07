@@ -97,7 +97,7 @@ values ('opertation',0,'available','2020-01-01','T1LS','IP:220.68.27.130, GPU:Ti
 insert into emmas.equipment (eq_type,eq_RANK,eq_status,acquisition,manufacturer,note,location,categori,eq_name) 
 values ('opertation',0,'available','2020-04-18','G1','IP:220.68.27.130, GPU:RTX2080Ti*2','서버실(151-225)','computer','Server6');
 insert into emmas.equipment (eq_type,eq_RANK,eq_status,acquisition,manufacturer,note,location,categori,eq_name) 
-values ('opertation',3,'available','2020-06-06','G1','IP:220.68.27.255, GPU:RTX2080Ti*2','서버실(151-225)','computer','Server7');
+values ('opertation',0,'in_use','2020-06-03','Super','IP:220.68.27.255, 로그파일 기록용','CVML 연구실','computer','Test_Se_LOG');
 
 #sample log
 insert into emmas.log (log_date, user_user_number,equipment_eq_number, log_case, log_file)
@@ -114,7 +114,7 @@ insert into emmas.req_board (id_board,title,descript,edit_date,user_number,respo
 values (4,'테스트 중입니다:re.','테스트를 하고자 합니다. \n 답변:테스트 완료했습니다. 01024891495','2020-06-07',1,1);
 
 
-SELECT * FROM emmas.log where equipment_eq_number=9 order by log_date desc limit 5;
+SELECT * FROM emmas.log where equipment_eq_number=10 order by log_date desc limit 5;
 
 #update status
 update emmas.user set status='sanctioned' where userName='김주찬';

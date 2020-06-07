@@ -10,14 +10,21 @@ module.exports = {
         function back_board(){
           window.history.back();
         }
-        var str;
-        var length;
-        str=document.getElementById("textarea2").value;
+        
         function keyup(){
+          var str;
+          var length;
+          str=document.getElementById("textarea2").value;
           if(document.getElementById("textarea").value.length>=100){
             alert("최대 100자 이내로 작성해주세요.");
             cleartext();
           }
+        }
+        function popup(lg_filename){
+            var url = "http://vision20.ga/manage/inform/log?id="+lg_filename;
+            var name = "Equipment log";
+            var option = "width = 700, height = 700, top = 100, left = 200, location = no"
+            window.open(url, name, option);
         }
         function gen_qr(str,size){
           var googleqr = "http://chart.apis.google.com/chart?cht=qr&chs="+size+"&choe=UTF-8&chid=H10"
@@ -108,7 +115,7 @@ module.exports = {
       +'<li><a href="/">한 눈에 보기</a></li><hr></ul>'
       +'<li><a href="/manage/setting">환경설정</a></li><hr>';
     }else{
-      tmpt=tmpt+'<li><a href="/manage/table">사용 및 대여</a></li><hr>'
+      tmpt=tmpt+'<li><a href="/manage/table">기자재 조회</a></li><hr>'
       +'<li><a href="/manage/board">요청사항</a></li><hr>'
       +'<li><a href="/manage/setting">환경설정</a></li><hr></ul>';
     }
@@ -123,22 +130,31 @@ module.exports = {
       }
       tmpt=tmpt+'<table id="detail" border="1" >'
             +`<caption>${list[0]['eq_name']} </caption>`;
-      if(list[0]['eq_status']=='in_use'){
-        tmpt=tmpt+`<tr><td>사용자</td><td>${list[0]['eq_name']}</td></tr>`;
-        btn =false;
-      }else{
-        tmpt=tmpt+`<tr><td>사용자</td><td>없음</td></tr>`;
-      }
-            
-      tmpt=tmpt  +`<tr><td rowspan="1">비고</td><td rowspan="1">${list[0]['note']}</td></tr>`;
-      tmpt=tmpt  +`<tr><td rowspan="5">최근 기록</td>`;
       if(eq_log.length==0){
-        tmpt=tmpt+`<td>최근 기록 없음</td></tr>`;
+        tmpt=tmpt+`<tr><td>현재 사용자</td><td colspan="2">없음</td></tr>`;
+        tmpt=tmpt  +`<tr><td rowspan="1">최근 기록</td>`;
+        tmpt=tmpt+`<td cospan="3">최근 기록 없음</td></tr>`;
+      }else{
+        if(eq_log[0]['log_case']=='start_use'||eq_log[0]['log_case']=='rent'){
+          var time2=new Date(eq_log[0]['log_date']);
+          var time1=new Date(Date.parse(time2)+7*1000*60*60*24);
+          var time2=new Date();
+          var time3=Math.floor((time1-time2)/(1000*60*60*24));
+          var time4 = Math.floor((time1-time2)/(1000*60*60)-(time3*24)); 
+          tmpt=tmpt+`<tr><th colspan="2">현재 사용자</th><th colspan="2">반납 예정일</th><th rowspan="2">기록 열람</th></tr>`;
+          tmpt=tmpt+`<tr><td colspan="2">${eq_log[0]['user_user_number']}</td><td colspan="2">${time3}일 ${time4}시간 남음</td></tr>`;
+          btn =false;
+        }else{
+          tmpt=tmpt+`<tr><th colspan="2">현재 사용자</th><th colspan="3">반납 예정일</th><th rowspan="2">기록 열람</th></tr>`;
+          tmpt=tmpt+`<tr><td colspan="2">없음</td><td colspan="2">없음</td></tr>`;
+          tmpt=tmpt  +`<tr><td rowspan="5">최근 기록</td>`;
+        }
       }
-      for(var i=0;i<eq_log.length;i++){ //b!!!!!!!!파일 열어서 내용 써주기
-        
-        tmpt=tmpt+`<td>${eq_log[i]['log_file']}</td></tr>`;
+      
+      for(var i=0;i<eq_log.length;i++){ 
+        tmpt=tmpt+`<td>사용자</td><td>${eq_log[i]['user_user_number']}</td><td colspan="2">유형: : ${eq_log[i]['log_case']}, 날짜 : ${eq_log[i]['log_date']}</td> <td> <input type="button" id="log${i}" value="상세보기" onclick="popup('${eq_log[i]['log_file']}')"></td></tr>`;
       }
+      tmpt=tmpt  +`<tr><td rowspan="1">비고</td><td rowspan="1" colspan="5">${list[0]['note']}</td></tr>`;
       tmpt=tmpt+'</table>';
       if(rank>=4){
         tmpt=tmpt+`<input type="button" value="QR 생성" onclick="gen_qr(${list[0]['eq_number']},200);">`
@@ -227,5 +243,7 @@ module.exports = {
     
 
     return tmpt;
+  },cal_date(date1,date2){
+
   }
 }
