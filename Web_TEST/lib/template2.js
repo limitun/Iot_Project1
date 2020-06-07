@@ -19,6 +19,29 @@ module.exports = {
             cleartext();
           }
         }
+        function gen_qr(str,size){
+          var googleqr = "http://chart.apis.google.com/chart?cht=qr&chs="+size+"&choe=UTF-8&chid=H10"
+          var text = "http://vision20.ga/manage/inform?id="+str;
+          if(str=='pass'){
+            var time = new Date().toLocaleString();
+            var rand2 = Math.floor(Math.random() * 100);
+            time= time+'~'+rand2;
+            text="http://vision20.ga/login_access?id="+time;
+          }
+          if(text!=""){
+          var qrchl = googleqr+"&chl="+encodeURIComponent(text);
+          var imgtag = document.createElement("img");
+          var br = document.createElement("br");
+          imgtag.setAttribute("id","qrcodeimg");
+          imgtag.setAttribute("src",qrchl);
+          imgtag.setAttribute("style","display:inline-block;");
+          document.getElementById("qr_result").removeChild(document.getElementById("qrcodeimg"));
+          document.getElementById("qr_result").appendChild(imgtag);
+          document.getElementById("qqr").value="출입 QR 코드 새로고침";
+          }else{
+              alert("생성할 정보가 없습니다.");
+          }
+        }
         
       </script>
       <title>EMMas</title>
@@ -109,12 +132,17 @@ module.exports = {
             
       tmpt=tmpt  +`<tr><td rowspan="1">비고</td><td rowspan="1">${list[0]['note']}</td></tr>`;
       tmpt=tmpt  +`<tr><td rowspan="5">최근 기록</td>`;
-      
+      if(eq_log.length==0){
+        tmpt=tmpt+`<td>최근 기록 없음</td></tr>`;
+      }
       for(var i=0;i<eq_log.length;i++){ //b!!!!!!!!파일 열어서 내용 써주기
         
         tmpt=tmpt+`<td>${eq_log[i]['log_file']}</td></tr>`;
       }
-      tmpt=tmpt+'</table><div id="qr_result"><br><img id="qrcodeimg" style="display:none;"></div></article>';
+      tmpt=tmpt+'</table>';
+      tmpt=tmpt+`<input type="button" value="QR 생성" onclick="gen_qr(${list[0]['eq_number']},200);">`;
+      tmpt=tmpt+'<div id="qr_result"><br><img id="qrcodeimg" style="display:none;"></div></article>';
+
       
       if(rank>=4){
         //관리자 버튼 ( 관리, 정보 수정)
@@ -123,25 +151,14 @@ module.exports = {
             <textarea id="textarea" rows="5" cols="50" onKeyUp="keyup()" placeholder="관리 내역을 작성하여 주십시오."></textarea>
           </p>
           <p>
-            <input type="button" value="관리 기록" onclick="submit">
+            <input type="button" value="관리 기록" onclick="submit();">
+            
             <input type="button" value="취소" onclick="back_board();">
           </p>
-        </form></article>
-        <script type="text/javascript">
-          var googleqr = "http://chart.apis.google.com/chart?cht=qr&chs=150&choe=UTF-8&chid=H10"
-          var text = "http://vision20.ga/manage/inform?id=${list[0]['eq_number']}";
-        if(text!=""){
-          var qrchl = googleqr+"&chl="+encodeURIComponent(text);
-          var imgtag = document.createElement("img");
-          var br = document.createElement("br");
-          imgtag.setAttribute("id","qrcodeimg");
-          imgtag.setAttribute("src",qrchl);
-          imgtag.setAttribute("style","display:inline-block;");
-          document.getElementById("qr_result").removeChild(document.getElementById("qrcodeimg"));
-          document.getElementById("qr_result").appendChild(imgtag);
-          }else{
-              alert("생성할 정보가 없습니다.");
-          }</script>`;
+          </form></article>
+          <script type="text/javascript">
+          
+          </script>`;
 
         }else{
           //사용자 버튼 ( 사용, 반납 --> 본인일 때)
@@ -166,11 +183,46 @@ module.exports = {
     return tmpt;
   },create_profile: function(list){
     var tmpt='<table class="profile">';
+    // console.log(list[0]['user_number']);
+    var expd ='jpg';
+    if(list[0]['user_RANK']==4){
+      expd='gif';
+    }
+    // console.log(expd);
     tmpt=tmpt+`<caption>사용자 프로필</caption>`
-    +`<tr><td>사용자명   : ${list[0]['userName']}</td><td rowspan="3"><img src="../pic/${list[0]['user_number']}.jpg"></td></tr>`
-    +`<tr><td>사용자등급 : ${list[0]['user_RANK']}</td></tr>`
-    +`<tr><td>사용자등급 : ${list[0]['user_RANK']}</td></tr>`
-    +`</table>`; 
+    +`<tr><td rowspan="3" id="img"><img src="../pic/${list[0]['user_number']}.${expd}" width="100" height="110"></td><td>사용자명   : ${list[0]['userName']}</td></tr>`
+    +`<tr><td>등급 : ${list[0]['user_RANK']}</td></tr>`;
+    var stat = list[0]['status'];
+    var stat2 ='';
+    if(stat =='normal'){
+      stat2='사용 가능';
+    }else if(stat=='sanctioned'){
+      stat2='제재된 ID';
+    }else if(stat=='wating_ap'){
+      stat2='승인 대기중';
+    }else if(stat=='in_use'){
+      stat2='사용 중';
+    }
+    tmpt=tmpt+`<tr><td>상태 : ${stat2}</td></tr>`;
+    tmpt=tmpt+`</table>`; 
+    return tmpt;
+  },create_qr: function(list){
+    var rank = list[0]['user_RANK'];
+    var stat = list[0]['status'];
+    var tmpt=`<div id="qr_result">`;
+    if(rank>-1){
+      if(stat=='sanctioned'){
+        tmpt=tmpt+`<p class="notice">사용 불가한 기능입니다.</p>`;
+      }else{
+        tmpt=tmpt+`<input type="button" id="qqr" value="출입 QR 코드 생성" onclick="gen_qr('pass',120);"><br>`;
+      }
+    }else{
+      tmpt=tmpt+`<p class="notice">사용 불가한 기능입니다.</p>`;
+    }
+      
+    tmpt=tmpt+`<img id="qrcodeimg" style="display:none;"></div>`;
+    
+
     return tmpt;
   }
 }

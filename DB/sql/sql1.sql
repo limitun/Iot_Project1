@@ -47,8 +47,8 @@ add name varchar(30);
 #categori is equipment_type
 
 #sample users
-insert emmas.signin (ID,PW,sign) values ('test13',HEX(AES_ENCRYPT('1234','zoo')),'OFF'); #암호화
-insert emmas.user values ((select user_number from emmas.signin where ID='test13'),'암호화',0,'normal');
+insert emmas.signin (ID,PW,sign) values ('test14','1234','OFF'); #암호화
+insert emmas.user values ((select user_number from emmas.signin where ID='test14'),'정수연',0,'normal');
 (select user_number from emmas.signin where ID='test10');
 #암호화
 insert emmas.signin (ID,PW,sign) values ('test13',HEX(AES_ENCRYPT('1234','zoo')),'OFF'); #암호화
@@ -100,7 +100,8 @@ insert into emmas.equipment (eq_type,eq_RANK,eq_status,acquisition,manufacturer,
 values ('opertation',3,'available','2020-06-06','G1','IP:220.68.27.255, GPU:RTX2080Ti*2','서버실(151-225)','computer','Server7');
 
 #sample log
-
+insert into emmas.log (log_date, user_user_number,equipment_eq_number, log_case, log_file)
+values ('2020-06-15', 5, 9, 'management', 'log_test5.log');
 
 #sample req_board
 insert into emmas.req_board (id_board,title,descript,edit_date,user_number,response_id)
@@ -113,3 +114,7 @@ insert into emmas.req_board (id_board,title,descript,edit_date,user_number,respo
 values (4,'테스트 중입니다:re.','테스트를 하고자 합니다. \n 답변:테스트 완료했습니다. 01024891495','2020-06-07',1,1);
 
 
+SELECT * FROM emmas.log where equipment_eq_number=9 order by log_date desc limit 5;
+
+#update status
+update emmas.user set status='sanctioned' where userName='김주찬';

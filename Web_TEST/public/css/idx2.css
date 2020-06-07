@@ -189,8 +189,16 @@ letter-spacing:10px;
 div.nav_menu li a { font-size:small;text-decoration: none; color: #ffffff;}
 div.nav_menu li a:hover { font-size:small;text-decoration: underline;}
 
+.notice{
+  color:red;
+  text-align:center;
+}
 
 /*profile*/
 table.profile{
   text-align: left;
+  margin-top: 10px;
+}
+table.profile tr td#img{
+  text-align: center;
 }

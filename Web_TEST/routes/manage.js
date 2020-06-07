@@ -44,12 +44,12 @@ module.exports = function (passport) {
             response.send(html);
           }else{
             var profile= template.create_profile(results);
-            var profile2= template.create_profile(results);
+            var profile2= template.create_qr(results);
             html = template.HTML(title, `<body class="vbox">
           <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
-          <section class="main hbox space-between">
-          <article class="flex3">${profile}</article>
-          <article class="flex3">${profile2}</article>
+          <section class="hbox space-between">
+          <article class="flex2">${profile}</article>
+          <article class="flex2">${profile2}</article>
           </section>
           <section class="main hbox space-between">
             <article class="flex"><a href="/manage/table">기자재 조회 및 사용</a></article>
