@@ -90,79 +90,79 @@ module.exports = {
       +'<li><a href="/manage/setting">환경설정</a></li><hr></ul>';
     }
     return tmpt;
-  },create_infm:function(list,rank){
-    var db=require("../lib/db");
-    var tmpt='<br>';
-    var eq_rank = list[0]['eq_RANK'];
-    var btn =true;
-    if(rank<eq_rank){
-      tmpt=tmpt+`<script> alert("접근 권한이 없습니다.");</script>`;
-      return tmpt;
-    }
-    tmpt=tmpt+'<table id="detail" border="1" >'
-          +`<caption>${list[0]['eq_name']} </caption>`;
-    if(list[0]['eq_status']=='in_use'){
-      tmpt=tmpt+`<tr><td>사용자</td><td>${list[0]['eq_name']}</td></tr>`;
-      btn =false;
-    }else{
-      tmpt=tmpt+`<tr><td>사용자</td><td>없음</td></tr>`;
-    }
-          
-    tmpt=tmpt  +`<tr><td rowspan="1">비고</td><td rowspan="1">${list[0]['note']}</td></tr>`;
-    tmpt=tmpt  +`<tr><td rowspan="5">최근 기록</td>`;
-    for(var i=0;i<5;i++){
-
-      tmpt=tmpt+`<td>${'hello'}</td></tr>`;
-    }
-    tmpt=tmpt+'</table><div id="qr_result"><br><img id="qrcodeimg" style="display:none;"></div></article>';
-    
+  },create_infm:function(list,rank,eq_log){
+      var tmpt='<br>';
+      var eq_rank = list[0]['eq_RANK'];
+      var btn =true;
+      if(rank<eq_rank){
+        tmpt=tmpt+`<script> alert("접근 권한이 없습니다.");</script>`;
+        return tmpt;
+      }
+      tmpt=tmpt+'<table id="detail" border="1" >'
+            +`<caption>${list[0]['eq_name']} </caption>`;
+      if(list[0]['eq_status']=='in_use'){
+        tmpt=tmpt+`<tr><td>사용자</td><td>${list[0]['eq_name']}</td></tr>`;
+        btn =false;
+      }else{
+        tmpt=tmpt+`<tr><td>사용자</td><td>없음</td></tr>`;
+      }
+            
+      tmpt=tmpt  +`<tr><td rowspan="1">비고</td><td rowspan="1">${list[0]['note']}</td></tr>`;
+      tmpt=tmpt  +`<tr><td rowspan="5">최근 기록</td>`;
+      
+      for(var i=0;i<eq_log.length;i++){ //b!!!!!!!!파일 열어서 내용 써주기
+        
+        tmpt=tmpt+`<td>${eq_log[i]['log_file']}</td></tr>`;
+      }
+      tmpt=tmpt+'</table><div id="qr_result"><br><img id="qrcodeimg" style="display:none;"></div></article>';
+      
       if(rank>=4){
         //관리자 버튼 ( 관리, 정보 수정)
-        tmpt=tmpt+`<article="flex1"><form>
-        <p>
-          <textarea id="textarea" rows="5" cols="50" onKeyUp="keyup()" placeholder="관리 내역을 작성하여 주십시오."></textarea>
-        </p>
-        <p>
-          <input type="button" value="관리 기록" onclick="submit">
-          <input type="button" value="취소" onclick="back_board();">
-        </p>
-      </form></article>
-      <script type="text/javascript">
-        var googleqr = "http://chart.apis.google.com/chart?cht=qr&chs=150&choe=UTF-8&chid=H10"
-        var text = "http://vision20.ga/manage/inform?id=${list[0]['eq_number']}";
-      if(text!=""){
-        var qrchl = googleqr+"&chl="+encodeURIComponent(text);
-        var imgtag = document.createElement("img");
-        var br = document.createElement("br");
-        imgtag.setAttribute("id","qrcodeimg");
-        imgtag.setAttribute("src",qrchl);
-        imgtag.setAttribute("style","display:inline-block;");
-        document.getElementById("qr_result").removeChild(document.getElementById("qrcodeimg"));
-        document.getElementById("qr_result").appendChild(imgtag);
-        }else{
-            alert("생성할 정보가 없습니다.");
-        }</script>`;
+          tmpt=tmpt+`<article="flex1"><form>
+          <p>
+            <textarea id="textarea" rows="5" cols="50" onKeyUp="keyup()" placeholder="관리 내역을 작성하여 주십시오."></textarea>
+          </p>
+          <p>
+            <input type="button" value="관리 기록" onclick="submit">
+            <input type="button" value="취소" onclick="back_board();">
+          </p>
+        </form></article>
+        <script type="text/javascript">
+          var googleqr = "http://chart.apis.google.com/chart?cht=qr&chs=150&choe=UTF-8&chid=H10"
+          var text = "http://vision20.ga/manage/inform?id=${list[0]['eq_number']}";
+        if(text!=""){
+          var qrchl = googleqr+"&chl="+encodeURIComponent(text);
+          var imgtag = document.createElement("img");
+          var br = document.createElement("br");
+          imgtag.setAttribute("id","qrcodeimg");
+          imgtag.setAttribute("src",qrchl);
+          imgtag.setAttribute("style","display:inline-block;");
+          document.getElementById("qr_result").removeChild(document.getElementById("qrcodeimg"));
+          document.getElementById("qr_result").appendChild(imgtag);
+          }else{
+              alert("생성할 정보가 없습니다.");
+          }</script>`;
 
-      }else{
-        //사용자 버튼 ( 사용, 반납 --> 본인일 때)
-        // <p>
-        //   <textarea id="textarea" rows="5" cols="50" onKeyUp="keyup()"></textarea>
-        // </p>
-        if(btn){
-        tmpt=tmpt+`<article="flex1"><form>
-        <p>
-          <input type="button" value="사용" onclick="submit">
-          <input type="button" value="취소" onclick="back_board();">
-        </p>
+        }else{
+          //사용자 버튼 ( 사용, 반납 --> 본인일 때)
+          // <p>
+          //   <textarea id="textarea" rows="5" cols="50" onKeyUp="keyup()"></textarea>
+          // </p>
+          if(btn){
+          tmpt=tmpt+`<article="flex1"><form>
+          <p>
+            <input type="button" value="사용" onclick="submit">
+            <input type="button" value="취소" onclick="back_board();">
+          </p>
+          </form></article>`;
+          }else{ //in_use 상태
+          tmpt=tmpt+`<article="flex1"><form>
+          <p>
+            <input type="button" value="취소" onclick="back_board();">
+          </p>
         </form></article>`;
-        }else{ //in_use 상태
-        tmpt=tmpt+`<article="flex1"><form>
-        <p>
-          <input type="button" value="취소" onclick="back_board();">
-        </p>
-      </form></article>`;
+        }
       }
-    }
     return tmpt;
   }
 }

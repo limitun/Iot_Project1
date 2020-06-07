@@ -163,7 +163,7 @@ module.exports = function (passport) {
                 if(t4==null){
                   answer='no';
                 }
-                list = list + `<tr><td>${t5}</td><td><a href="/manage/board/${t1}">${t1}</a></td>`+
+                list = list + `<tr><td>${t5}</td><td><a href="/manage/board/content?id=${t5}">${t1}</a></td>`+
                           `<td>${t2}</td><td>${t3}</td><td class="${answer}">${answer}</td></tr>`;  
                 i = i + 1;
               }
@@ -343,31 +343,37 @@ module.exports = function (passport) {
           if(error2){
             throw error2;
           }else{
-            var rank=results2[0]['user_rank'];
-            // console.log(rank);
-            list = template.create_table(results1,rank);
-            menu_list = template.create_menu(rank);
-            infm = template.create_infm(results1,rank);
-            // console.log(results1);
-            var html = template.HTML(title, `<body class="vbox">
-            <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
-            <section class="main hbox space-between">
-                <article class="flex1" >
-                ${menu_list}
-                </article>
-                <article class="flex4">
+            db.query(`SELECT * FROM emmas.log where equipment_eq_number=? order by log_date desc limit 5;`,[queryData.id],function(error3,results3,fileds3){
+              if(error3){
+                throw error3;
+              }else{
+                var rank=results2[0]['user_rank'];
+                // console.log(rank);
+                list = template.create_table(results1,rank);
+                menu_list = template.create_menu(rank);
+                infm = template.create_infm(results1,rank,results3);
+                // console.log(results1);
+                var html = template.HTML(title, `<body class="vbox">
+                <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+                <section class="main hbox space-between">
                     <article class="flex1" >
-                      ${list}
+                    ${menu_list}
                     </article>
-                    <article class="flex4" >
-                      ${infm}
-                    </article>
-            </section>
-            <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
-            <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
-            '');
-            response.send(html);
-            }
+                    <article class="flex4">
+                        <article class="flex1" >
+                          ${list}
+                        </article>
+                        <article class="flex4" >
+                          ${infm}
+                        </article>
+                </section>
+                <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
+                <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
+                '');
+                response.send(html);
+               }
+            });
+          }
         });
       }
       });
