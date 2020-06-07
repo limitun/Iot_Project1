@@ -14,7 +14,7 @@ module.exports = {
         function keyup(){
           var str;
           var length;
-          str=document.getElementById("textarea2").value;
+          str=document.getElementById("textarea").value;
           if(document.getElementById("textarea").value.length>=100){
             alert("최대 100자 이내로 작성해주세요.");
             cleartext();
@@ -30,10 +30,18 @@ module.exports = {
           var url = "http://vision20.ga/manage/uses?id="+user_number+":"+eq_number;
           var option = "width = 500, height = 500, location=no";
           var name="uses";
-          window.open(url,name,option);
+          window.open(url,name,option).self.close();;
+          alert('사용을 시작합니다.');
+          location.reload(true);
         }
         function rtrn(user_number,eq_number){
-
+          var msg = document.getElementById("textarea").value;
+          var url = "http://vision20.ga/manage/rtrn?id="+user_number+":"+eq_number+":"+msg;
+          var option = "width = 500, height = 500, location=no";
+          var name="rtrn";
+          window.open(url,name,option).self.close();
+          alert('반납하였습니다.');
+          location.reload(true);
         }
         function gen_qr(str,size){
           var googleqr = "http://chart.apis.google.com/chart?cht=qr&chs="+size+"&choe=UTF-8&chid=H10"
@@ -191,22 +199,22 @@ module.exports = {
 
         }else{
           //사용자 버튼 ( 사용, 반납 --> 본인일 때)
-          // <p>
-          //   <textarea id="textarea" rows="5" cols="50" onKeyUp="keyup()"></textarea>
-          // </p>
         
         if(list2[0]['user_number']==eq_log[0]['user_user_number']){
           if(btn){
             tmpt=tmpt+`<article="flex1"><form>
           <p>
-            <input type="button" value="사용" onclick="retn(${list2[0]['user_number']},${list[0]['eq_number']});">
+            <input type="button" value="사용" onclick="uses(${list2[0]['user_number']},${list[0]['eq_number']});">
             <input type="button" value="취소" onclick="back_board();">
           </p>
           </form></article>`;
           }else{
             tmpt=tmpt+`<article="flex1"><form>
-          <p>
-            <input type="button" value="반납" onclick="retn(${list2[0]['user_number']},${list[0]['eq_number']});">
+            <p>
+            <textarea id="textarea" rows="5" cols="50" onKeyUp="keyup()"></textarea>
+            </p>
+            <p>
+            <input type="button" value="반납" onclick="rtrn(${list2[0]['user_number']},${list[0]['eq_number']});">
             <input type="button" value="취소" onclick="back_board();">
           </p>
           </form></article>`;

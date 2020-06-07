@@ -107,9 +107,10 @@ module.exports = function (passport) {
       var _url = request.url;
       var queryData = url.parse(_url,true).query;
       var str_arr = queryData.id.split(':');
+      var title= '';
       if(auth.isOwner(request)==true){
         case1= "start_use";
-        var filepath="../log/";
+        var filepath="./log/";
         var time = new Date().toLocaleString();
         var str = time.replace(/:/gi,'_');
         var t = true;
@@ -129,26 +130,65 @@ module.exports = function (passport) {
         });
         if(t){
             var fs=require('fs');
-            var data = `userNumber: ${i} equipNumber:${j} log : ${time}, ${case1} 에 대한 사용 기록입니다. 특이사항 없음`;       
+            var data = `userNumber: ${i} equipNumber:${j} log : ${time}, ${case1} 에 대한 사용 기록입니다. \n특이사항 없음`;       
             fs.writeFile(filepath+filename, data,'utf8', function(err, data) { console.log(data); }); 
         }
         sql = `update emmas.equipment set eq_status='in_use' where eq_number=${j}`;
         db.query(sql,function(err,results,fileds){
           if(err) console.log(err);
           });
-        var html=template.HTML(title, `<body class="vbox">
-        <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템 성공</a></h1></header>
-
-        <script></script>
-        </body>`,
-          '');
-        response.send(html);
+          t=true;
+          response.redirect(`/manage/inform?id=${j}`);
       }else{
         request.flash('info', 'expired session');
         response.redirect('/auth/login');
       }
     });
-
+    /* rtrn */
+    router.get('/rtrn', function (request, response) {
+      var _url = request.url;
+      var queryData = url.parse(_url,true).query;
+      var str_arr = queryData.id.split(':');
+      console.log(str_arr);
+      var title= '';
+      if(auth.isOwner(request)==true){
+        case1= "end_of_use";
+        var filepath="./log/";
+        var time = new Date().toLocaleString();
+        var str = time.replace(/:/gi,'_');
+        var t = true;
+        var i= str_arr[0];
+        var j= str_arr[1];
+        var msg1= str_arr[2];
+        var filename='log_'+str+'_'+i+'_'+j+'_'+case1+'.log';
+        sql = `insert into emmas.log (log_date, user_user_number,equipment_eq_number, log_case, log_file)
+        values ('${time}', ${i}, ${j}, '${case1}', '${filename}');
+        `;
+        db.query(sql,function(err,results,fileds){
+            if(err){
+                console.log(err);
+                t=false;
+            }else{
+            console.log(str);
+            }
+        });
+        if(t){
+            var fs=require('fs');
+            var data = `userNumber: ${i} equipNumber:${j} log : ${time}, ${case1} 에 대한 사용 기록입니다. \n ${msg1}`;       
+            fs.writeFile(filepath+filename, data,'utf8', function(err, data) { console.log(data); }); 
+            t=true;
+        }
+        sql = `update emmas.equipment set eq_status='available' where eq_number=${j}`;
+        db.query(sql,function(err,results,fileds){
+          if(err) console.log(err);
+          });
+        
+        response.redirect(`/manage/inform?id=${j}`);
+      }else{
+        request.flash('info', 'expired session');
+        response.redirect('/auth/login');
+      }
+    });
     /* board */
   router.get('/board', function (request, response) {
     var title = '';
@@ -204,6 +244,19 @@ module.exports = function (passport) {
             });
           }
       });
+    }else{
+      request.flash('info', 'expired session');
+      response.redirect('/auth/login');
+    }
+  });
+  router.get('/board/content',function(request,response){
+    var title='';
+    var menu_list='';
+    var _url = request.url;
+      var queryData = url.parse(_url,true).query;
+    if(auth.isOwner(request)==true){
+      db.query()
+
     }else{
       request.flash('info', 'expired session');
       response.redirect('/auth/login');
