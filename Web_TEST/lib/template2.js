@@ -26,6 +26,15 @@ module.exports = {
             var option = "width = 700, height = 700, top = 100, left = 200, location = no"
             window.open(url, name, option);
         }
+        function uses(user_number,eq_number){
+          var url = "http://vision20.ga/manage/uses?id="+user_number+":"+eq_number;
+          var option = "width = 500, height = 500, location=no";
+          var name="uses";
+          window.open(url,name,option);
+        }
+        function rtrn(user_number,eq_number){
+
+        }
         function gen_qr(str,size){
           var googleqr = "http://chart.apis.google.com/chart?cht=qr&chs="+size+"&choe=UTF-8&chid=H10"
           var text = "http://vision20.ga/manage/inform?id="+str;
@@ -120,9 +129,10 @@ module.exports = {
       +'<li><a href="/manage/setting">환경설정</a></li><hr></ul>';
     }
     return tmpt;
-  },create_infm:function(list,rank,eq_log){
+  },create_infm:function(list,list2,eq_log){
       var tmpt='<br>';
       var eq_rank = list[0]['eq_RANK'];
+      var rank= list2[0]['user_RANK'];
       var btn =true;
       if(rank<eq_rank){
         tmpt=tmpt+`<script> alert("접근 권한이 없습니다.");</script>`;
@@ -184,20 +194,41 @@ module.exports = {
           // <p>
           //   <textarea id="textarea" rows="5" cols="50" onKeyUp="keyup()"></textarea>
           // </p>
+        
+        if(list2[0]['user_number']==eq_log[0]['user_user_number']){
           if(btn){
-          tmpt=tmpt+`<article="flex1"><form>
+            tmpt=tmpt+`<article="flex1"><form>
           <p>
-            <input type="button" value="사용" onclick="submit">
+            <input type="button" value="사용" onclick="retn(${list2[0]['user_number']},${list[0]['eq_number']});">
             <input type="button" value="취소" onclick="back_board();">
           </p>
           </form></article>`;
-          }else{ //in_use 상태
-          tmpt=tmpt+`<article="flex1"><form>
+          }else{
+            tmpt=tmpt+`<article="flex1"><form>
           <p>
+            <input type="button" value="반납" onclick="retn(${list2[0]['user_number']},${list[0]['eq_number']});">
             <input type="button" value="취소" onclick="back_board();">
           </p>
-        </form></article>`;
-        }
+          </form></article>`;
+          }
+          
+        }else{
+          if(btn){
+            tmpt=tmpt+`<article="flex1"><form>
+            <p>
+              <input type="button" value="사용" onclick="uses(${list2[0]['user_number']},${list[0]['eq_number']});">
+              <input type="button" value="취소" onclick="back_board();">
+            </p>
+            </form></article>`;
+          }
+          else{ //in_use 상태
+            tmpt=tmpt+`<article="flex1"><form>
+            <p>
+              <input type="button" value="취소" onclick="back_board();">
+            </p>
+            </form></article>`;
+         }
+      }
       }
     return tmpt;
   },create_profile: function(list){
@@ -209,8 +240,8 @@ module.exports = {
     }
     // console.log(expd);
     tmpt=tmpt+`<caption>사용자 프로필</caption>`
-    +`<tr><td rowspan="3" id="img"><img src="../pic/${list[0]['user_number']}.${expd}" width="100" height="110" alt="이미지를 등록하세요"></td><td>사용자명   : ${list[0]['userName']}</td></tr>`
-    +`<tr><td>등급 : ${list[0]['user_RANK']}</td></tr>`;
+    +`<tr><td rowspan="5" id="img"><img src="../pic/${list[0]['user_number']}.${expd}" width="100" height="110" alt="이미지를 등록하세요"></td><td>사용자명   : ${list[0]['userName']}</td></tr>`
+    +`<tr><td>사용자번호 : ${list[0]['user_number']}</td></tr><tr><td>등급 : ${list[0]['user_RANK']}</td></tr>`;
     var stat = list[0]['status'];
     var stat2 ='';
     if(stat =='normal'){

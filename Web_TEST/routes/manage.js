@@ -34,7 +34,7 @@ module.exports = function (passport) {
           </section>
           <section class="hbox space-between" style="height: 45%">
           <article class="flex"><a href="/manage/board">요청 사항</a></article>
-          <article class="flex"><a href="/manage/uses">최근 기록</a></article>
+          <article class="flex"><a href="/manage/uses_log">최근 기록</a></article>
           </section>
           
           <footer class="type1"><a href="/manage/"><br>EMMaS 기자재 정보 관리 시스템</a></footer>
@@ -103,31 +103,46 @@ module.exports = function (passport) {
     }
   });
     /* uses */
-    router.get('/uses', function (request, response) {
-      var title = '';
-      var menu_list='';
+  router.get('/uses', function (request, response) {
+      var _url = request.url;
+      var queryData = url.parse(_url,true).query;
+      var str_arr = queryData.id.split(':');
       if(auth.isOwner(request)==true){
-        db.query(`select user_rank from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error2,results2,fields2){
-          if(error2){
-            throw error2;
-          }else{
-            var rank=results2[0]['user_rank'];
-              var i = 0;
-              var list = 'uses';
-              menu_list = template.create_menu(rank);
-              var html = template.HTML(title, `<body class="vbox">
-              <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
-              <section class="main hbox space-between">
-                  <article class="flex1" >
-                  ${menu_list}
-                  </article>
-              <article class="flex5">${list}</article></section>
-              <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
-              <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
-              '');
-              response.send(html);
+        case1= "start_use";
+        var filepath="../log/";
+        var time = new Date().toLocaleString();
+        var str = time.replace(/:/gi,'_');
+        var t = true;
+        var i= str_arr[0];
+        var j= str_arr[1];
+        var filename='log_'+str+'_'+i+'_'+j+'_'+case1+'.log';
+        sql = `insert into emmas.log (log_date, user_user_number,equipment_eq_number, log_case, log_file)
+        values ('${time}', ${i}, ${j}, '${case1}', '${filename}');
+        `;
+        db.query(sql,function(err,results,fileds){
+            if(err){
+                console.log(err);
+                t=false;
+            }else{
+            console.log(str);
             }
         });
+        if(t){
+            var fs=require('fs');
+            var data = `userNumber: ${i} equipNumber:${j} log : ${time}, ${case1} 에 대한 사용 기록입니다. 특이사항 없음`;       
+            fs.writeFile(filepath+filename, data,'utf8', function(err, data) { console.log(data); }); 
+        }
+        sql = `update emmas.equipment set eq_status='in_use' where eq_number=${j}`;
+        db.query(sql,function(err,results,fileds){
+          if(err) console.log(err);
+          });
+        var html=template.HTML(title, `<body class="vbox">
+        <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템 성공</a></h1></header>
+
+        <script></script>
+        </body>`,
+          '');
+        response.send(html);
       }else{
         request.flash('info', 'expired session');
         response.redirect('/auth/login');
@@ -356,7 +371,7 @@ module.exports = function (passport) {
                 // console.log(rank);
                 list = template.create_table(results1,rank);
                 menu_list = template.create_menu(rank);
-                infm = template.create_infm(results1,rank,results3);
+                infm = template.create_infm(results1,results2,results3);
                 // console.log(results1);
                 var html = template.HTML(title, `<body class="vbox">
                 <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
@@ -387,7 +402,6 @@ module.exports = function (passport) {
       response.redirect('/auth/login');
     }
   });
-  router.get('/')
   /*view log*/
   router.get('/inform/log', function (request,response){
     var _url = request.url;
