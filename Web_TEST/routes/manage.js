@@ -20,7 +20,7 @@ module.exports = function (passport) {
     var title = 'manage';
     var html ='';
     if(auth.isOwner(request)==true){
-    db.query(`select user_rank from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error,results,fields){
+    db.query(`select * from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error,results,fields){
       if(error){
           throw error;
       }else{
@@ -43,9 +43,14 @@ module.exports = function (passport) {
             '');
             response.send(html);
           }else{
-      
+            var profile= template.create_profile(results);
+            var profile2= template.create_profile(results);
             html = template.HTML(title, `<body class="vbox">
           <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+          <section class="main hbox space-between">
+          <article class="flex3">${profile}</article>
+          <article class="flex3">${profile2}</article>
+          </section>
           <section class="main hbox space-between">
             <article class="flex"><a href="/manage/table">기자재 조회 및 사용</a></article>
           </section>

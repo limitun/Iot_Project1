@@ -164,5 +164,13 @@ module.exports = {
         }
       }
     return tmpt;
+  },create_profile: function(list){
+    var tmpt='<table class="profile">';
+    tmpt=tmpt+`<caption>사용자 프로필</caption>`
+    +`<tr><td>사용자명   : ${list[0]['userName']}</td><td rowspan="3"><img src="../pic/${list[0]['user_number']}.jpg"></td></tr>`
+    +`<tr><td>사용자등급 : ${list[0]['user_RANK']}</td></tr>`
+    +`<tr><td>사용자등급 : ${list[0]['user_RANK']}</td></tr>`
+    +`</table>`; 
+    return tmpt;
   }
 }

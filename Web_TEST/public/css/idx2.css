@@ -190,3 +190,7 @@ div.nav_menu li a { font-size:small;text-decoration: none; color: #ffffff;}
 div.nav_menu li a:hover { font-size:small;text-decoration: underline;}
 
 
+/*profile*/
+table.profile{
+  text-align: left;
+}
