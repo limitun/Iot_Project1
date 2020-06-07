@@ -25,7 +25,7 @@ module.exports = {
           if(str=='pass'){
             var time = new Date().toLocaleString();
             var rand2 = Math.floor(Math.random() * 100);
-            time= time+'~'+rand2;
+            time= time+'/'+rand2;
             text="http://vision20.ga/login_access?id="+time;
           }
           if(text!=""){
@@ -140,8 +140,11 @@ module.exports = {
         tmpt=tmpt+`<td>${eq_log[i]['log_file']}</td></tr>`;
       }
       tmpt=tmpt+'</table>';
-      tmpt=tmpt+`<input type="button" value="QR 생성" onclick="gen_qr(${list[0]['eq_number']},200);">`;
-      tmpt=tmpt+'<div id="qr_result"><br><img id="qrcodeimg" style="display:none;"></div></article>';
+      if(rank>=4){
+        tmpt=tmpt+`<input type="button" value="QR 생성" onclick="gen_qr(${list[0]['eq_number']},200);">`
+        +'<div id="qr_result"><br><img id="qrcodeimg" style="display:none;"></div>';
+      }
+      tmpt=tmpt+'</article>';
 
       
       if(rank>=4){
@@ -190,7 +193,7 @@ module.exports = {
     }
     // console.log(expd);
     tmpt=tmpt+`<caption>사용자 프로필</caption>`
-    +`<tr><td rowspan="3" id="img"><img src="../pic/${list[0]['user_number']}.${expd}" width="100" height="110"></td><td>사용자명   : ${list[0]['userName']}</td></tr>`
+    +`<tr><td rowspan="3" id="img"><img src="../pic/${list[0]['user_number']}.${expd}" width="100" height="110" alt="이미지를 등록하세요"></td><td>사용자명   : ${list[0]['userName']}</td></tr>`
     +`<tr><td>등급 : ${list[0]['user_RANK']}</td></tr>`;
     var stat = list[0]['status'];
     var stat2 ='';
