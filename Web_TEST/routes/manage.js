@@ -24,16 +24,21 @@ module.exports = function (passport) {
       if(error){
           throw error;
       }else{
-          var rank=results[0]['user_rank'];
+          var rank=results[0]['user_RANK'];
           if(rank>=4){
+            var profile= template.create_profile(results);
+            var profile2= template.create_qr(results);
             html = template.HTML(title, `<body class="vbox">
           <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+          <section class="hbox space-between">
+          <article class="flex2">${profile}</article>
+          <article class="flex2">${profile2}</article>
+          </section>
           <section class="main hbox space-between">
             <article class="flex"><a href="/manage/table">기자재 조회/관리</a></article>
           </section>
-          <section class="hbox space-between" style="height: 45%">
+          <section class="hbox space-between" style="height: 30%">
           <article class="flex"><a href="/manage/board">요청 사항</a></article>
-          <article class="flex"><a href="/manage/uses_log">최근 기록</a></article>
           </section>
           
           <footer class="type1"><a href="/manage/"><br>EMMaS 기자재 정보 관리 시스템</a></footer>
@@ -53,7 +58,7 @@ module.exports = function (passport) {
           <section class="main hbox space-between">
             <article class="flex"><a href="/manage/table">기자재 조회 및 사용</a></article>
           </section>
-          <section class="main hbox space-between">
+          <section class="hbox space-between" style="height: 30%">
             <article class="flex"><a href="/manage/board">요청 사항</a></article>
           </section>
           
@@ -78,7 +83,7 @@ module.exports = function (passport) {
         if(error2){
           throw error2;
         }else{
-          var rank=results2[0]['user_rank'];
+          var rank=results2[0]['user_RANK'];
             var i = 0;
             var list = 'settings';
             menu_list = template.create_menu(rank);
@@ -403,17 +408,17 @@ module.exports = function (passport) {
     var title='';
     var menu_list='';
     if(auth.isOwner(request)==true){
-      db.query(`select * from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error2,results2,fields2){
+      db.query(`select * from emmas.user where user_number=(select user_number from emmas.signin where id='${request.user}');`, function(error2,results2,fields2){
         if(error2){
           throw error2;
         }else{
-          var rank=results2[0]['user_rank'];
+          var rank=results2[0]['user_RANK'];
           var i = 0;
           // var list = `<form action="/manage/create_process" method="post">
           var list = `<form>
-          <p> 요청사항 </p>
-          <p><input type="text" id="title2" size="50" placeholder="title"></p>
-          <p> 내용 </p>
+          <p style="color:white"> 요청사항 </p>
+          <p><input type="text" id="title" size="50" placeholder="title"></p>
+          <p style="color:white"> 내용 </p>
           <p>
             <textarea id="textarea" rows="20" cols="80" onKeyUp="keyup()"></textarea>
           </p>
@@ -581,7 +586,7 @@ module.exports = function (passport) {
               if(error3){
                 throw error3;
               }else{
-                var rank=results2[0]['user_rank'];
+                var rank=results2[0]['user_RANK'];
                 // console.log(rank);
                 list = template.create_table(results1,rank);
                 menu_list = template.create_menu(rank);
@@ -625,7 +630,7 @@ module.exports = function (passport) {
         if(error2){
           throw error2;
         }else{
-          var rank=results2[0]['user_rank'];
+          var rank=results2[0]['user_RANK'];
           var title=queryData.id;
           var i = 0;
           var list = 'settings';

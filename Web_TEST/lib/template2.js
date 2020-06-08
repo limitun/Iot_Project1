@@ -18,8 +18,8 @@ module.exports = {
         }
         function up_load2(id){
           var str=document.getElementById("textarea").value;
-          var title=document.getElementById("text").value;
-          var option = "width = 600, height = 600, top = 100, left = 200, location = no";
+          var title=document.getElementById("title").value;
+          var option = "width = 600, height = 300, top = 100, left = 200, location = no";
           var url = "http://vision20.ga/manage/create_process?id="+id+"-n"+title+":"+str;
           alert('요청되었습니다.');
           window.open(url,name,option).self.close();
@@ -33,7 +33,7 @@ module.exports = {
           var str5=document.getElementById("locat").value;
           var str6=document.getElementById("cate").value;
           var str7=document.getElementById("name").value;
-          var option = "width = 600, height = 600, top = 100, left = 200, location = no";
+          var option = "width = 600, height = 300, top = 100, left = 200, location = no";
           var name = "regist_eq";
           var url = "http://vision20.ga/manage/regist_process?id="+id+":"+str1+":"+str2+":"+str3+":"+str4+":"+str5+":"+str6+":"+str7;
           alert('등록되었습니다.');
@@ -55,18 +55,18 @@ module.exports = {
         }
         function popup2(url){
           var name = "Equipment Board";
-          var option = "width = 600, height = 600, top = 100, left = 200, location = no"
+          var option = "width = 600, height = 300, top = 100, left = 200, location = no"
           window.open(url, name, option);
       }
         function popup(lg_filename){
             var url = "http://vision20.ga/manage/inform/log?id="+lg_filename;
             var name = "Equipment log";
-            var option = "width = 700, height = 700, top = 100, left = 200, location = no"
+            var option = "width = 700, height = 300, top = 100, left = 200, location = no"
             window.open(url, name, option);
         }
         function uses(user_number,eq_number){
           var url = "http://vision20.ga/manage/uses?id="+user_number+":"+eq_number;
-          var option = "width = 500, height = 500, location=no";
+          var option = "width = 500, height = 300, location=no";
           var name="uses";
           window.open(url,name,option).self.close();;
           alert('사용을 시작합니다.');
@@ -75,7 +75,7 @@ module.exports = {
         function rtrn(user_number,eq_number){
           var msg = document.getElementById("textarea").value;
           var url = "http://vision20.ga/manage/rtrn?id="+user_number+":"+eq_number+":"+msg;
-          var option = "width = 500, height = 500, location=no";
+          var option = "width = 500, height = 300, location=no";
           var name="rtrn";
           window.open(url,name,option).self.close();
           alert('반납하였습니다.');
@@ -84,7 +84,7 @@ module.exports = {
         function mgmt(user_number,eq_number){
           var msg = document.getElementById("textarea").value;
           var url = "http://vision20.ga/manage/mgmt?id="+user_number+":"+eq_number+":"+msg;
-          var option = "width = 500, height = 500, location=no";
+          var option = "width = 500, height = 300, location=no";
           var name="mgmt";
           window.open(url,name,option).self.close();
           alert('기록하였습니다.');
@@ -97,7 +97,7 @@ module.exports = {
             var time = new Date().toLocaleString();
             var rand2 = Math.floor(Math.random() * 100);
             time= time+'/'+rand2;
-            text="http://vision20.ga/login_access?id="+time;
+            text="http://vision20.ga/auth/login_access2?id="+time;
           }
           if(text!=""){
           var qrchl = googleqr+"&chl="+encodeURIComponent(text);
@@ -244,7 +244,14 @@ module.exports = {
 
         }else{
           //사용자 버튼 ( 사용, 반납 --> 본인일 때)
-        
+        if(eq_log.length==0){
+          tmpt=tmpt+`<article="flex1"><form>
+          <p>
+            <input type="button" value="사용" onclick="uses(${list2[0]['user_number']},${list[0]['eq_number']});">
+            <input type="button" value="취소" onclick="back_board();">
+          </p>
+          </form></article>`;
+        }else{
         if(list2[0]['user_number']==eq_log[0]['user_user_number']){
           if(btn){
             tmpt=tmpt+`<article="flex1"><form>
@@ -282,6 +289,7 @@ module.exports = {
             </form></article>`;
          }
       }
+    }
       }
     return tmpt;
   },create_profile: function(list){

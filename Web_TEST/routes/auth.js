@@ -73,7 +73,12 @@ module.exports = function (passport) {
       successFlash: true
     })
     );
-
+    router.get('/login_access', function (request, response) {
+      response.send('로그인 실패');
+    });
+    router.get('/login_access2', function (request, response) {
+      response.send('로그인 성공');
+    });
 
   router.get('/logout', function (request, response) {
     request.logout();
