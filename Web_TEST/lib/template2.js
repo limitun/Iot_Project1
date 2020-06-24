@@ -4,117 +4,12 @@ module.exports = {
     <!doctype html>
     <html>
     <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <style></style>
       <link type="text/css" rel="stylesheet" href="../css/idx2.css">
       <link type="text/css" rel="stylesheet" href="./css/idx2.css">
-      <script type="text/javascript">
-        function back_board(){
-          window.history.back();
-        }
-        function up_load(id,msg){
-          var str=document.getElementById("textarea").value;
-          var url = "http://vision20.ga/manage/create_b?id="+id+"-n"+msg+"re: 답변:"+str;
-          location.href=url;
-        }
-        function up_load2(id){
-          var str=document.getElementById("textarea").value;
-          var title=document.getElementById("title").value;
-          var option = "width = 600, height = 300, top = 100, left = 200, location = no";
-          var url = "http://vision20.ga/manage/create_process?id="+id+"-n"+title+":"+str;
-          alert('요청되었습니다.');
-          window.open(url,name,option).self.close();
-          location.href="http://vision20.ga/manage/board";
-        }
-        function up_load3(id){//type,name,ranki,manu,note,locat,cate
-          var str1=document.getElementById("type").value;
-          var str2=document.getElementById("ranki").value;
-          var str3=document.getElementById("manu").value;
-          var str4=document.getElementById("note").value;
-          var str5=document.getElementById("locat").value;
-          var str6=document.getElementById("cate").value;
-          var str7=document.getElementById("name").value;
-          var option = "width = 600, height = 300, top = 100, left = 200, location = no";
-          var name = "regist_eq";
-          var url = "http://vision20.ga/manage/regist_process?id="+id+":"+str1+":"+str2+":"+str3+":"+str4+":"+str5+":"+str6+":"+str7;
-          alert('등록되었습니다.');
-          
-          window.open(url,name,option).self.close();
-          location.href="http://vision20.ga/manage/table";
-        }
-        function close_board(){
-          window.close();
-        }
-        function keyup(){
-          var str;
-          var length;
-          str=document.getElementById("textarea").value;
-          if(document.getElementById("textarea").value.length>=100){
-            alert("최대 100자 이내로 작성해주세요.");
-            cleartext();
-          }
-        }
-        function popup2(url){
-          var name = "Equipment Board";
-          var option = "width = 600, height = 300, top = 100, left = 200, location = no"
-          window.open(url, name, option);
-      }
-        function popup(lg_filename){
-            var url = "http://vision20.ga/manage/inform/log?id="+lg_filename;
-            var name = "Equipment log";
-            var option = "width = 700, height = 300, top = 100, left = 200, location = no"
-            window.open(url, name, option);
-        }
-        function uses(user_number,eq_number){
-          var url = "http://vision20.ga/manage/uses?id="+user_number+":"+eq_number;
-          var option = "width = 500, height = 300, location=no";
-          var name="uses";
-          window.open(url,name,option).self.close();;
-          alert('사용을 시작합니다.');
-          location.reload(true);
-        }
-        function rtrn(user_number,eq_number){
-          var msg = document.getElementById("textarea").value;
-          var url = "http://vision20.ga/manage/rtrn?id="+user_number+":"+eq_number+":"+msg;
-          var option = "width = 500, height = 300, location=no";
-          var name="rtrn";
-          window.open(url,name,option).self.close();
-          alert('반납하였습니다.');
-          location.reload(true);
-        }
-        function mgmt(user_number,eq_number){
-          var msg = document.getElementById("textarea").value;
-          var url = "http://vision20.ga/manage/mgmt?id="+user_number+":"+eq_number+":"+msg;
-          var option = "width = 500, height = 300, location=no";
-          var name="mgmt";
-          window.open(url,name,option).self.close();
-          alert('기록하였습니다.');
-          location.reload(true);
-        }
-        function gen_qr(str,size){
-          var googleqr = "http://chart.apis.google.com/chart?cht=qr&chs="+size+"&choe=UTF-8&chid=H10"
-          var text = "http://vision20.ga/manage/inform?id="+str;
-          if(str=='pass'){
-            var time = new Date().toLocaleString();
-            var rand2 = Math.floor(Math.random() * 100);
-            time= time+'/'+rand2;
-            text="http://vision20.ga/auth/login_access2?id="+time;
-          }
-          if(text!=""){
-          var qrchl = googleqr+"&chl="+encodeURIComponent(text);
-          var imgtag = document.createElement("img");
-          var br = document.createElement("br");
-          imgtag.setAttribute("id","qrcodeimg");
-          imgtag.setAttribute("src",qrchl);
-          imgtag.setAttribute("style","display:inline-block;");
-          document.getElementById("qr_result").removeChild(document.getElementById("qrcodeimg"));
-          document.getElementById("qr_result").appendChild(imgtag);
-          document.getElementById("qqr").value="출입 QR 코드 새로고침";
-          }else{
-              alert("생성할 정보가 없습니다.");
-          }
-        }
-        
-      </script>
+      <script type="text/javascript" src="../js/func.js"></script>
+      
       <title>EMMas</title>
       <meta charset="utf-8">
     </head>
@@ -160,6 +55,45 @@ module.exports = {
       }
       for(var key in list[i]){
         if(key=='note'||key=='acquisition'){
+          continue;
+        }else{
+          tmpt=tmpt+`<td class="${stat}">${list[i][key]}</td>`;
+      }
+      }tmpt+=`<td><a href="/manage/inform?id=${tmp3}">상세정보</a></td></tr>`;//수정 하이퍼링크
+      i=i+1;
+    }tmpt= tmpt+'</table>';
+    return tmpt;
+  },create_table2:function(list,rank){
+    var i=0;
+    var tmpt = `<table class="check" border="1" collapse:"true"><tr><th>기자재 번호</th><th>등급</th>
+    <th>상태</th><th>장소</th><th>종류</th>,<th>기자재명</th>
+    <th>링크</th></tr>`;
+    if(rank==-1){
+      tmpt=tmpt+'</table><p class="notice">현재 사용 불가능한 ID입니다.</p>';
+      return tmpt; 
+    }
+    while(i<list.length){
+      tmpt=tmpt+'<tr>'
+      var stat='';  //상태 관리 조건문
+      var tmp1=list[i]['eq_status'];
+      var tmp2=list[i]['eq_RANK'];
+      var tmp3 = list[i]['eq_number'];
+      // console.log(rank,tmp2);
+      if(rank<tmp2){
+        i=i+1;
+        continue;
+      }
+      if(tmp1=='in_use'){
+        stat='in_use';
+      }else if(tmp1=='available'){
+        stat='avail';
+      }else if(tmp1=='unavail'){
+        stat='x';
+      }else{
+        stat='o';
+      }
+      for(var key in list[i]){
+        if(key=='note'||key=='acquisition'||key=='eq_type'||key=='manufacturer'){
           continue;
         }else{
           tmpt=tmpt+`<td class="${stat}">${list[i][key]}</td>`;

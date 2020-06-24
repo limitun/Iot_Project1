@@ -4,8 +4,10 @@ module.exports = {
     <!doctype html>
     <html>
     <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <style></style>
       <link type="text/css" rel="stylesheet" href="../css/idx.css">
+      <script type="text/javascript" src="../js/func.js"></script>
       <title>EMMas</title>
       <meta charset="utf-8">
     </head>

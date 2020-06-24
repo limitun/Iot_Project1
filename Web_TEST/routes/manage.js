@@ -417,10 +417,10 @@ module.exports = function (passport) {
           // var list = `<form action="/manage/create_process" method="post">
           var list = `<form>
           <p style="color:white"> 요청사항 </p>
-          <p><input type="text" id="title" size="50" placeholder="title"></p>
+          <p><input type="text" id="title" size="45" placeholder="title"></p>
           <p style="color:white"> 내용 </p>
           <p>
-            <textarea id="textarea" rows="20" cols="80" onKeyUp="keyup()"></textarea>
+            <textarea id="textarea" rows="15" cols="50" onKeyUp="keyup()"></textarea>
           </p>
           <p>
             <input type="button" value="요청" onclick="up_load2('${results2[0]['user_number']}');"><input type="button" value="취소" onclick="back_board();">
@@ -537,7 +537,7 @@ module.exports = function (passport) {
           }else{
             var rank=results2[0]['user_rank'];
             // console.log(rank);
-            list = template.create_table(results1,rank);
+            list = template.create_table2(results1,rank);
             menu_list = template.create_menu(rank);
             // console.log(results1);
             var html = template.HTML(title, `<body class="vbox">

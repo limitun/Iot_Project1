@@ -12,9 +12,6 @@ router.get('/', function (request, response) {
   var title = '';
   var description = '';
   if(auth.isOwner(request)==true){
-    // var html = template.HTML(title,
-    //   '','/manage' );
-    // response.send(html);
     response.redirect('/manage');
   }else{
     if(fmsg.info){

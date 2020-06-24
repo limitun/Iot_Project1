@@ -14,5 +14,4 @@ var db = require('./lib/db');
 
 
 exports.read_log = function (request,response){
-
 }

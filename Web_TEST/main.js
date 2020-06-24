@@ -30,7 +30,6 @@ var passport = require('./lib/passport')(app);
 app.get('*', function (request, response, next) {
   next();
 });
-
 var indexRouter = require('./routes/index');
 var manageRouter = require('./routes/manage')(passport);
 var authRouter = require('./routes/auth')(passport);
