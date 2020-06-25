@@ -6,6 +6,7 @@ html, body {
     background: #232526;  
     background: -webkit-linear-gradient(to right, #414345, #232526);  
     background: linear-gradient(to right, #323436, #232526); 
+    font-style:bold;
 }
 
 /*정렬*/
@@ -14,7 +15,8 @@ html, body {
 #fdb_msg { text-align: center;}
 
 /*TITLE*/
-header h1.type1{ font-size:large;text-align: center;}
+header h1.type1{ font-size:x-large;text-align: center;}
+
 .type1 A:link   { text-decoration: none;color: #FFFFFF; }
 .type1 A:visited   { text-decoration: none; color:#FFFFFF; }
 .type1 A:active   { text-decoration: none; color: #000000;}
@@ -57,7 +59,6 @@ article.flex a{
 /*background: linear-gradient(to right, #000000,#ffffff);*/
 
 
-
 /* items flex/expand vertically */
 .vbox {
   display: -webkit-flex;
@@ -94,11 +95,11 @@ article.flex a{
 
 footer{
     text-align: center;color:#AAAABB;
-    font-size:small;
+    font-size:medium;
 }
-header, footer {
-    height: 50px;
-  }
+/* header, footer {
+  
+  } */
 
 .main {
   -webkit-flex: 1;
@@ -127,13 +128,28 @@ header, footer {
 }
 
 /* 테이블 설정*/
+table.txc-table { width:80%; height:80%;table-layout:fixed; text-align:center; margin:20px;}
+table.txc-table td{
+  font-size:18px;
+}
+table.txc-table tr input{
+  width:95%;
 
+  font-size:18px;
+}
+table.txc-table tr input.btn1{
+  width:10%;
+}
+/* table tr{
+  width:100%;
+} */
 table, td, tr, th{
-    font-size:small;
+    font-size:medium;
     color:white;
 }
 table.check tr td a{
-  font-size:small;
+  font-size:medium;
+  width:100%;
 }
 table.check tr td a:link   { text-decoration: none;color: #ffffff; }
 table.check tr td a:visited   { text-decoration: none; color:#ffffff; }
@@ -148,7 +164,13 @@ td.avail{
     color:greenyellow;
     background-color: #333333;
 }
-
+/* .flex1 {
+  width:13%;
+} */
+/*over flow 속성*/
+.flex4{
+  overflow:auto    ;
+}
 .flex5 {
   background-color: white;
   color: black;
@@ -173,7 +195,15 @@ td.avail{
 .flex5 table.board td.yes{
   color: lightgreen;
 }
+.flex6{
+  width:20%;
+}
+.flex7{
+  flex:1;
+  overflow:auto;
+}
 div.nav_menu{
+  width:95%;
   list-style: none;
   text-align: center;
   padding: 10px 0;
@@ -181,13 +211,15 @@ div.nav_menu{
 /* div.nav_menu:hover{background: -webkit-linear-gradient(to right, #000000, #000000);  
   background: linear-gradient(to right, #000000, #000000);} */
 div.nav_menu li{
-font-size:small;
+font-size:medium;
 /* text-transform: uppercase; */
-padding: 0 10px;
+padding: 10px 10px;
+font-weight:bold;
 letter-spacing:10px;
 }
-div.nav_menu li a { font-size:small;text-decoration: none; color: #ffffff;}
-div.nav_menu li a:hover { font-size:small;text-decoration: underline;}
+div.nav_menu li:hover{ background-color: #323436; width:100%; height: 10%;font-weight:bold;}
+div.nav_menu li a { font-size:medium;text-decoration: none; color: #ffffff;}
+div.nav_menu li a:hover { font-size:large   ;text-decoration: underline; }
 
 .notice{
   color:red;
@@ -201,4 +233,31 @@ table.profile{
 }
 table.profile tr td#img{
   text-align: center;
+}
+
+
+/* all button*/
+.btn1 { border: 1.5px solid #bbbaba; 
+  text-align: center;
+  background-color: #37373a; 
+  color: white; padding: 5px; 
+  font-weight:bold;} 
+
+.btn1:hover { color:white; background-color: #6e88a1; }
+
+/*scroll bar*/
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #2f3542;
+}
+::-webkit-scrollbar-track {
+  background-color: grey;
+}
+
+/*form 1*/
+.form1{
+  vertical-align: center;
+  margin:10px;
 }

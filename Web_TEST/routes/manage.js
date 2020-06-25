@@ -28,24 +28,33 @@ module.exports = function (passport) {
           if(rank>=4){
             var profile= template.create_profile(results);
             var profile2= template.create_qr(results);
-            html = template.HTML(title, `<body class="vbox">
-          <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
-          <section class="hbox space-between">
-          <article class="flex2">${profile}</article>
-          <article class="flex2">${profile2}</article>
-          </section>
-          <section class="main hbox space-between">
-            <article class="flex"><a href="/manage/table">기자재 조회/관리</a></article>
-          </section>
-          <section class="hbox space-between" style="height: 30%">
-          <article class="flex"><a href="/manage/board">요청 사항</a></article>
-          </section>
-          
-          <footer class="type1"><a href="/manage/"><br>EMMaS 기자재 정보 관리 시스템</a></footer>
-          <footer class="type1"><a href="/manage/logout">로그아웃</a></footer>
-          </body>`,
-            '');
-            response.send(html);
+            db.query(`select * from emmas.log order by log_date desc limit 20;`,function(err3,res3,fileds){
+              if(err3){
+                throw err3;
+              }else{
+                var log_list = template.cr_log_list(res3);
+                html = template.HTML(title, `<body class="vbox">
+              <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+              <section class="hbox space-between">
+              <article class="flex2">${profile}</article>
+              <article class="flex2">${profile2}</article>
+              </section>
+              <section class="main hbox space-between">
+                <article class="flex"><a href="/manage/table">기자재 조회/관리</a></article>
+                <article class="flex"><a href="/manage/board">요청 사항</a></article>
+                
+              </section>
+              <section class="hbox space-between" style="height: 30%">
+              <article class="flex7">${log_list}</article>
+              </section>
+              
+              <footer class="type1"><a href="/manage/"><br>EMMaS 기자재 정보 관리 시스템</a></br>
+              <a href="/manage/logout">로그아웃</a></footer>
+              </body>`,
+                '');
+              response.send(html);
+              }
+            });
           }else{
             var profile= template.create_profile(results);
             var profile2= template.create_qr(results);
@@ -62,8 +71,8 @@ module.exports = function (passport) {
             <article class="flex"><a href="/manage/board">요청 사항</a></article>
           </section>
           
-          <footer class="type1"><a href="/manage"><br>EMMaS 기자재 정보 관리 시스템</a></footer>
-          <footer class="type1"><a href="/manage/logout">로그아웃</a></footer>
+          <footer class="type1"><a href="/manage"><br>EMMaS 기자재 정보 관리 시스템</a></br>
+          <a href="/manage/logout">로그아웃</a></footer>
           </body>`,
             '');
             response.send(html);
@@ -90,12 +99,12 @@ module.exports = function (passport) {
             var html = template.HTML(title, `<body class="vbox">
             <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
             <section class="main hbox space-between">
-                <article class="flex1" >
+                <article class="flex6" >
                 ${menu_list}
                 </article>
             <article class="flex5">${list}</article></section>
-            <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
-            <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
+            <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></br>
+            <a href="/manage/logout">로그아웃</a></footer></body>`,
             '');
             response.send(html);
           }
@@ -126,9 +135,10 @@ module.exports = function (passport) {
         db.query(sql,function(err,results,fileds){
             if(err){
                 console.log(err);
+                alert('처리중 입니다. 잠시 후 시도해주세요.');
                 t=false;
             }else{
-            console.log(str);
+
             }
         });
         if(t){
@@ -138,7 +148,8 @@ module.exports = function (passport) {
         }
         sql = `update emmas.equipment set eq_status='in_use' where eq_number=${j}`;
         db.query(sql,function(err,results,fileds){
-          if(err) console.log(err);
+          if(err){ console.log(err);
+          alert('처리중 입니다. 잠시 후 시도해주세요.');}
           });
           t=true;
           response.redirect(`/manage/inform?id=${j}`);
@@ -171,6 +182,7 @@ module.exports = function (passport) {
             if(err){
                 console.log(err);
                 t=false;
+                alert('처리중 입니다. 잠시 후 시도해주세요.');
             }else{
             console.log(str);
             }
@@ -183,11 +195,14 @@ module.exports = function (passport) {
         }
         sql = `update emmas.equipment set eq_status='management' where eq_number=${j}`;
         db.query(sql,function(err,results,fileds){
-          if(err) console.log(err);
+          if(err) {
+            console.log(err);
+            alert('처리중 입니다. 잠시 후 시도해주세요.');}
           });
         
         response.redirect(`/manage/table`);
       }else{
+        
         request.flash('info', 'expired session');
         response.redirect('/auth/login');
       }
@@ -214,6 +229,7 @@ module.exports = function (passport) {
         `;
         db.query(sql,function(err,results,fileds){
             if(err){
+              alert('처리중 입니다. 잠시 후 시도해주세요.');
                 console.log(err);
                 t=false;
             }else{
@@ -228,7 +244,10 @@ module.exports = function (passport) {
         }
         sql = `update emmas.equipment set eq_status='available' where eq_number=${j}`;
         db.query(sql,function(err,results,fileds){
-          if(err) console.log(err);
+          if(err) {
+            console.log(err);
+            alert('처리중 입니다. 잠시 후 시도해주세요.');
+          }
           });
         
         response.redirect(`/manage/inform?id=${j}`);
@@ -247,7 +266,7 @@ module.exports = function (passport) {
           throw error2;
         }else{
           var rank=results2[0]['user_rank'];
-          db.query(`select * from emmas.req_board as r left JOIN user as u ON  r.user_number=u.user_number order by edit_date DESC limit 10;`, function(error,results,fields){
+          db.query(`select * from emmas.req_board as r left JOIN user as u ON  r.user_number=u.user_number order by edit_date DESC `, function(error,results,fields){
             if(error){
               throw error;
             }else{
@@ -275,17 +294,17 @@ module.exports = function (passport) {
                           `<td>${t2}</td><td>${t3}</td><td class="${answer}">${answer}</td></tr>`;  
                 i = i + 1;
               }
-              list = list+'</table><p></p><p><a href="/manage/create">요청사항 작성</a></p>';
+              list = list+'</table><p><button class="btn1" style="font-size:medium;"><a href="/manage/create">요청사항 작성</a> </button></p>';
               menu_list = template.create_menu(rank);
               var html = template.HTML(title, `<body class="vbox">
               <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
               <section class="main hbox space-between">
-                  <article class="flex1" >
+                  <article class="flex6" >
                   ${menu_list}
                   </article>
               <article class="flex5">${list}</article></section>
-              <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
-              <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
+              <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></br>
+              <a href="/manage/logout">로그아웃</a></footer></body>`,
               '');
               response.send(html);
             }
@@ -320,7 +339,7 @@ module.exports = function (passport) {
         <article class="flex">작성 날짜 : ${edit_date}</article>
         <article class="flex">작성 내용 : ${Q_A[0]}</article>
         <article class="flex">답변 내용 : ${Q_A[1]}</article>
-        <article class="flex"><p> <input type="button" value="취소" onclick="close_board();">
+        <article class="flex"><p> <input class="btn1" type="button" value="취소" onclick="close_board();">
       </p></article>
         </section>
         `,'');
@@ -332,8 +351,8 @@ module.exports = function (passport) {
             <textarea id="textarea" rows="5" cols="50" onKeyUp="keyup()"></textarea>
             </p>
             <p>
-            <input type="button" value="답변" onclick="up_load('${id}','${description}');">
-            <input type="button" value="취소" onclick="close_board();">
+            <input class="btn1" type="button" value="답변" onclick="up_load('${id}','${description}');">
+            <input class="btn1" type="button" value="취소" onclick="close_board();">
           </p>`;
           }
         var html=template.HTML(title,`<body class="vbox">
@@ -423,19 +442,19 @@ module.exports = function (passport) {
             <textarea id="textarea" rows="15" cols="50" onKeyUp="keyup()"></textarea>
           </p>
           <p>
-            <input type="button" value="요청" onclick="up_load2('${results2[0]['user_number']}');"><input type="button" value="취소" onclick="back_board();">
+            <input class="btn1" type="button" value="요청" onclick="up_load2('${results2[0]['user_number']}');"><input class="btn1" type="button" value="취소" onclick="back_board();">
           </p>
         </form>`;
           menu_list = template.create_menu(rank);
           var html = template.HTML(title, `<body class="vbox">
           <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
           <section class="main hbox space-between">
-              <article class="flex1" >
+              <article class="flex6" >
               ${menu_list}
               </article>
           <article class="flex5">${list}</article></section>
-          <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
-          <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
+          <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></br>
+          <a href="/manage/logout">로그아웃</a></footer></body>`,
           '');
           response.send(html);
           }
@@ -459,7 +478,9 @@ module.exports = function (passport) {
 //           // var list = `<form action="/manage/create_process" method="post">
 //           insert into emmas.equipment (eq_type,eq_RANK,eq_status,acquisition,manufacturer,note,location,categori,eq_name) 
 // values ('opertation',0,'in_use','2020-06-03','Super','IP:220.68.27.255, 로그파일 기록용','CVML 연구실','computer','Test_Se_LOG');
-          var list = `<div class="box"><form action="/manage/regist_process" method="post"><table><tr>
+          var list = `<div class="box1"><form action="/manage/regist_process" method="post">
+          <table class="txc-table">
+          <tr>
           <td> 기자재 타입 </td>
           <td><input type="text" id="type" value="opertation"></td></tr><tr> 
           <td> 기자재명 </td>
@@ -474,18 +495,19 @@ module.exports = function (passport) {
           <td><input type="text" id="locat" value="디지털정보관 151-101호실"></td></tr><tr>
           <td> 분류 </td>
           <td><input type="text" id="cate" value="computer"></td></tr>
-          <tr><td><input type="button" value="제출" onclick="up_load3(${results2[0]['user_number']});"></td><td><input type="button" value="취소" onclick="back_board();"></td></tr></table>
+          <tr><td>&nbsp; </td><td> </td></tr>
+          <tr><td colspan="2"><input class="btn1" type="button" value="제출" onclick="up_load3(${results2[0]['user_number']});">
+          &nbsp;<input class ="btn1" type="button" value="취소" onclick="back_board();"></div></td></tr></table>
         </form></div>`;
           menu_list = template.create_menu(rank);
           var html = template.HTML(title, `<body class="vbox">
           <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
           <section class="main hbox space-between">
-              <article class="flex1" >
+              <article class="flex6" >
               ${menu_list}
               </article>
           <article class="flex3">${list}</article></section>
-          <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
-          <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
+          <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></br><a href="/manage/logout">로그아웃</a></footer></body>`,
           '');
           response.send(html);
           }
@@ -521,40 +543,198 @@ module.exports = function (passport) {
     var title = 'manage';
     var list = '';
     var menu_list='';
+    
+    
     if(auth.isOwner(request)==true){
-    db.query('SELECT * from equipment order by eq_status', function(error1,results1,fields1){
-      if(error1){
-        console.log(error1);
-        var html = template.HTML(title, `<body class="vbox">
-        <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
-        ${error1}<br><body>`,
-          );
-        response.send(html);
-      }else{
-        db.query(`select user_rank from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error2,results2,fields2){
-          if(error2){
-            throw error2;
-          }else{
-            var rank=results2[0]['user_rank'];
-            // console.log(rank);
-            list = template.create_table2(results1,rank);
-            menu_list = template.create_menu(rank);
-            // console.log(results1);
+        db.query('SELECT * from equipment order by eq_status', function(error1,results1,fields1){
+          if(error1){
+            console.log(error1);
             var html = template.HTML(title, `<body class="vbox">
             <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
-            <section class="main hbox space-between">
-                <article class="flex1" >
-                ${menu_list}
-                </article>
-            <article class="flex4">${list}</article></section>
-            <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
-            <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
-            '');
+            ${error1}<br><body>`,
+              );
             response.send(html);
-            }
-        });
+          }else{
+            db.query(`select user_rank from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error2,results2,fields2){
+              if(error2){
+                throw error2;
+              }else{
+                var rank=results2[0]['user_rank'];
+                // console.log(rank);
+                list = template.create_table2(results1,rank);
+                menu_list = template.create_menu(rank);
+                // console.log(results1);
+                var html = template.HTML(title, `<body class="vbox">
+                <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+                <section class="main hbox space-between">
+                    <article class="flex6">
+                    ${menu_list}
+                    </article>
+                <article class="flex4"><form class="form1"><select id="srch1">
+                <option value="등급">등급</option>
+                <option value="상태">상태</option>
+                <option value="장소">장소</option>
+                <option value="종류">종류</option>
+                <option value="이름">이름</option>
+                </select>&nbsp;`+
+                `<input type="text" name="name" id="search" onkeydown="Enter_Check()";>
+                <input type="text" style="display: none;" />
+                <input type="button" onclick="search_s()" value="검색"></form>
+                ${list}</article></section>
+                <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></br><a href="/manage/logout">로그아웃</a></footer></body>`,
+                '');
+                response.send(html);
+                }
+            });
+          }
+          });
+    }else{
+      request.flash('info', 'expired session');
+      response.redirect('/auth/login');
+    } 
+  });
+
+  router.get('/table_c', function (request, response) {
+    var title = 'manage';
+    var _url = request.url;
+    var queryData = url.parse(_url,true).query;
+    if(queryData.name){
+      
+    }
+    var list = '';
+    var menu_list='';
+    var str = queryData.id.split(':');
+    
+    if(auth.isOwner(request)==true){
+      if(!str[1]){
+        db.query('SELECT * from equipment order by eq_status', function(error1,results1,fields1){
+          if(error1){
+            console.log(error1);
+            var html = template.HTML(title, `<body class="vbox">
+            <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+            ${error1}<br><body>`,
+              );
+            response.send(html);
+          }else{
+            db.query(`select user_rank from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error2,results2,fields2){
+              if(error2){
+                throw error2;
+              }else{
+                var rank=results2[0]['user_rank'];
+                // console.log(rank);
+                list = template.create_table2(results1,rank);
+                menu_list = template.create_menu(rank);
+                // console.log(results1);
+                var html = template.HTML(title, `<body class="vbox">
+                <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+                <section class="main hbox space-between">
+                    <article class="flex6">
+                    ${menu_list}
+                    </article>
+                <article class="flex4">
+                <form class="form1"><select id="srch1">
+                    <option value="등급">등급</option>
+                    <option value="상태">상태</option>
+                    <option value="장소">장소</option>
+                    <option value="종류">종류</option>
+                    <option value="이름">이름</option>
+                    </select>&nbsp;
+                    <script >
+                    var cond = document.getElementById('srch1');
+                    for(var j=0;j<cond.length;j++){
+                      if(cond[j].value=='${str[0]}'){
+                        cond[j].selected=true;
+                      }else{
+                        cond[j].selected=false;
+                      }
+                    }
+                    </script>
+                    <input type="text" name="name" id="search" onkeydown="Enter_Check()";>
+                    <input type="text" style="display: none;" />
+                    <input type="button" onclick="search_s()" value="검색"></form> 
+                ${list}</article></section>
+                <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></br><a href="/manage/logout">로그아웃</a></footer></body>`,
+                '');
+                response.send(html);
+                }
+            });
+          }
+          });
+      }else{
+        var condition = str[0];
+        switch(condition){
+          case '등급':
+            condition='eq_RANK';
+            break;
+          case '상태':
+            condition='eq_status';
+            break;
+          case '장소':
+            condition='location';
+            break;
+          case '종류':
+            condition='categori';
+            break;
+          default:
+            condition='eq_name';
+            break;
+        }
+        db.query(`SELECT * from equipment where ${condition} like '%${str[1]}%' order by eq_status`, function(error1,results1,fields1){
+          if(error1){
+            console.log(error1);
+            var html = template.HTML(title, `<body class="vbox">
+            <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+            ${error1}<br><body>`,
+              );
+            response.send(html);
+          }else{
+            db.query(`select user_rank from emmas.user where user_number=(select user_number from emmas.signin where id=?);`,[request.user], function(error2,results2,fields2){
+              if(error2){
+                throw error2;
+              }else{
+                var rank=results2[0]['user_rank'];
+                // console.log(rank);
+                list = template.create_table2(results1,rank);
+                menu_list = template.create_menu(rank);
+                // console.log(results1);
+                var html = template.HTML(title, `<body class="vbox">
+                <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
+                <section class="main hbox space-between">
+                    <article class="flex6">
+                    ${menu_list}
+                    </article>
+                <article class="flex4">
+                <form class="form1"><select id="srch1">
+                    <option value="등급">등급</option>
+                    <option value="상태">상태</option>
+                    <option value="장소">장소</option>
+                    <option value="종류">종류</option>
+                    <option value="이름">이름</option>
+                    </select>&nbsp;`+
+                    `<script >
+                    var cond = document.getElementById('srch1');
+                    for(var j=0;j<cond.length;j++){
+                      if(cond[j].value=='${str[0]}'){
+                        cond[j].selected=true;
+                      }else{
+                        cond[j].selected=false;
+                      }
+                    }
+                    </script>
+                    <input type="text" name="name" id="search" onkeydown="Enter_Check()";>
+                    <input type="button" onclick="search_s()" value="검색">
+                    <input type="text" style="display: none;" />
+                    </form>
+                    
+                ${list}</article></section>
+                <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></br><a href="/manage/logout">로그아웃</a></footer></body>`,
+                '');
+                response.send(html);
+                }
+            });
+          }
+          });
       }
-      });
     }else{
       request.flash('info', 'expired session');
       response.redirect('/auth/login');
@@ -595,7 +775,7 @@ module.exports = function (passport) {
                 var html = template.HTML(title, `<body class="vbox">
                 <header><h1 class="type1"><a href="/manage/">EMMaS 기자재 정보 관리 시스템</a></h1></header>
                 <section class="main hbox space-between">
-                    <article class="flex1" >
+                    <article class="flex6" >
                     ${menu_list}
                     </article>
                     <article class="flex4">
@@ -606,8 +786,7 @@ module.exports = function (passport) {
                           ${infm}
                         </article>
                 </section>
-                <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></footer>
-                <footer class="type1"><a href="/manage/logout">로그아웃</a></footer></body>`,
+                <footer class="type1"><a href="/manage">EMMaS 기자재 정보 관리 시스템</a></br><a href="/manage/logout">로그아웃</a></footer></body>`,
                 '');
                 response.send(html);
                }

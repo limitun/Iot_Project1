@@ -52,4 +52,4 @@ app.listen(80, function () {
 });
 
 app.disable("x-powered-by");
-/*pm2 start main.js --watch --ignore-watch="data/* sessions/*"  --no-daemon*/
+/*pm2 start main.js --watch --ignore-watch="data/* sessions/* log/*"  --no-daemon*/

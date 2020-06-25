@@ -2,10 +2,15 @@
 function back_board(){
     window.history.back();
 }
+function back_board1(){
+    location.href="http://vision20.ga/manage/table";
+}
+    
 function up_load(id,msg){
     var str=document.getElementById("textarea").value;
     var url = "http://vision20.ga/manage/create_b?id="+id+"-n"+msg+"re: 답변:"+str;
     location.href=url;
+    opener.location.reload();    //부모창(opener) 새로고침
 }
 function up_load2(id){
     var str=document.getElementById("textarea").value;
@@ -30,6 +35,7 @@ function up_load3(id){//type,name,ranki,manu,note,locat,cate
     alert('등록되었습니다.');
     
     window.open(url,name,option).self.close();
+
     location.href="http://vision20.ga/manage/table";
 }
 function close_board(){
@@ -42,6 +48,21 @@ function keyup(){
     if(document.getElementById("textarea").value.length>=100){
     alert("최대 100자 이내로 작성해주세요.");
     cleartext();
+    }
+}
+
+
+function search_s(){
+ var str;
+ var condition;
+ str = document.getElementById("search").value;
+ condition = document.getElementById("srch1").value; //selected option of select box 
+ var url = "http://vision20.ga/manage/table_c?id="+condition+":"+str;
+ location.href=url;
+}
+function Enter_Check(){
+    if(event.keyCode==13){
+        search_s();
     }
 }
 function popup2(url){
@@ -59,27 +80,27 @@ function uses(user_number,eq_number){
     var url = "http://vision20.ga/manage/uses?id="+user_number+":"+eq_number;
     var option = "width = 500, height = 300, location=no";
     var name="uses";
-    window.open(url,name,option).self.close();;
+    window.open(url,name,option).self.close();
+    location.href="http://vision20.ga/manage/inform?id="+eq_number;
     alert('사용을 시작합니다.');
-    location.reload(true);
 }
 function rtrn(user_number,eq_number){
-    var msg = document.getElementById("textarea").value;
+    var msg = document.getElementById("textarea").value+'.';
     var url = "http://vision20.ga/manage/rtrn?id="+user_number+":"+eq_number+":"+msg;
     var option = "width = 500, height = 300, location=no";
     var name="rtrn";
     window.open(url,name,option).self.close();
+    location.href="http://vision20.ga/manage/inform?id="+eq_number;
     alert('반납하였습니다.');
-    location.reload(true);
 }
 function mgmt(user_number,eq_number){
-    var msg = document.getElementById("textarea").value;
+    var msg = document.getElementById("textarea").value+'.';
     var url = "http://vision20.ga/manage/mgmt?id="+user_number+":"+eq_number+":"+msg;
     var option = "width = 500, height = 300, location=no";
     var name="mgmt";
     window.open(url,name,option).self.close();
+    location.href="http://vision20.ga/manage/inform?id="+eq_number;
     alert('기록하였습니다.');
-    location.reload(true);
 }
 function gen_qr(str,size){
     var googleqr = "http://chart.apis.google.com/chart?cht=qr&chs="+size+"&choe=UTF-8&chid=H10"

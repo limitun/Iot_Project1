@@ -7,8 +7,9 @@ module.exports = {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <style></style>
       <link type="text/css" rel="stylesheet" href="../css/idx2.css">
-      <link type="text/css" rel="stylesheet" href="./css/idx2.css">
+      <!--<link type="text/css" rel="stylesheet" href="../../css/idx2.css">-->
       <script type="text/javascript" src="../js/func.js"></script>
+      <script type="text/javascript" src="../../js/func.js"></script>
       
       <title>EMMas</title>
       <meta charset="utf-8">
@@ -27,7 +28,7 @@ module.exports = {
   },create_table:function(list,rank){
     var i=0;
     var tmpt = `<table class="check" border="1" collapse:"true"><tr><th>기자재 번호</th><th>분류</th><th>등급</th>
-    <th>상태</th><th>제조사</th><th>장소</th><th>종류</th>,<th>기자재명</th>
+    <th>상태</th><th>제조사</th><th>장소</th><th>종류</th><th>기자재명</th>
     <th>링크</th></tr>`;
     if(rank==-1){
       tmpt=tmpt+'</table><p class="notice">현재 사용 불가능한 ID입니다.</p>';
@@ -65,8 +66,8 @@ module.exports = {
     return tmpt;
   },create_table2:function(list,rank){
     var i=0;
-    var tmpt = `<table class="check" border="1" collapse:"true"><tr><th>기자재 번호</th><th>등급</th>
-    <th>상태</th><th>장소</th><th>종류</th>,<th>기자재명</th>
+    var tmpt=  `<table class="check" border="1" collapse:"true"><tr><th>기자재 번호</th><th>등급</th>
+    <th>상태</th><th>장소</th><th>종류</th><th>기자재명</th>
     <th>링크</th></tr>`;
     if(rank==-1){
       tmpt=tmpt+'</table><p class="notice">현재 사용 불가능한 ID입니다.</p>';
@@ -110,7 +111,7 @@ module.exports = {
       +'<li><a href="/manage/regist">기자재 등록</a></li><hr>'
       +'<li><a href="/manage/board">요청사항</a></li><hr>'
       // +'<li><a href="/manage/qrcode">QR코드생성</a></li><hr>'
-      +'<li><a href="/">한 눈에 보기</a></li><hr></ul>';
+      +'<li><a href="/">홈으로</a></li><hr></ul>';
     }else{
       tmpt=tmpt+'<li><a href="/manage/table">기자재 조회</a></li><hr>'
       +'<li><a href="/manage/board">요청사항</a></li><hr>';
@@ -154,7 +155,7 @@ module.exports = {
       tmpt=tmpt  +`<tr><td rowspan="1">비고</td><td rowspan="1" colspan="5">${list[0]['note']}</td></tr>`;
       tmpt=tmpt+'</table>';
       if(rank>=4){
-        tmpt=tmpt+`<input type="button" value="QR 생성" onclick="gen_qr(${list[0]['eq_number']},200);">`
+        tmpt=tmpt+`<input class="btn1" type="button" value="QR 생성" onclick="gen_qr(${list[0]['eq_number']},200);">`
         +'<div id="qr_result"><br><img id="qrcodeimg" style="display:none;"></div>';
       }
       tmpt=tmpt+'</article>';
@@ -167,9 +168,9 @@ module.exports = {
             <textarea id="textarea" rows="5" cols="50" onKeyUp="keyup()" placeholder="관리 내역을 작성하여 주십시오."></textarea>
           </p>
           <p>
-            <input type="button" value="관리 기록" onclick="mgmt(${list2[0]['user_number']},${list[0]['eq_number']});">
+            <input class="btn1" ype="button" value="관리 기록" onclick="mgmt(${list2[0]['user_number']},${list[0]['eq_number']});">
             
-            <input type="button" value="취소" onclick="back_board();">
+            <input class="btn1" type="button" value="취소" onclick="back_board1();">
           </p>
           </form></article>
           <script type="text/javascript">
@@ -181,8 +182,8 @@ module.exports = {
         if(eq_log.length==0){
           tmpt=tmpt+`<article="flex1"><form>
           <p>
-            <input type="button" value="사용" onclick="uses(${list2[0]['user_number']},${list[0]['eq_number']});">
-            <input type="button" value="취소" onclick="back_board();">
+            <input class="btn1" type="button" value="사용" onclick="uses(${list2[0]['user_number']},${list[0]['eq_number']});">
+            <input class="btn1" type="button" value="취소" onclick="back_board1();">
           </p>
           </form></article>`;
         }else{
@@ -190,8 +191,8 @@ module.exports = {
           if(btn){
             tmpt=tmpt+`<article="flex1"><form>
           <p>
-            <input type="button" value="사용" onclick="uses(${list2[0]['user_number']},${list[0]['eq_number']});">
-            <input type="button" value="취소" onclick="back_board();">
+            <input class="btn1" type="button" value="사용" onclick="uses(${list2[0]['user_number']},${list[0]['eq_number']});">
+            <input class="btn1" type="button" value="취소" onclick="back_board1();">
           </p>
           </form></article>`;
           }else{
@@ -200,8 +201,8 @@ module.exports = {
             <textarea id="textarea" rows="5" cols="50" onKeyUp="keyup()"></textarea>
             </p>
             <p>
-            <input type="button" value="반납" onclick="rtrn(${list2[0]['user_number']},${list[0]['eq_number']});">
-            <input type="button" value="취소" onclick="back_board();">
+            <input class="btn1" type="button" value="반납" onclick="rtrn(${list2[0]['user_number']},${list[0]['eq_number']});">
+            <input class="btn1" type="button" value="취소" onclick="back_board1();">
           </p>
           </form></article>`;
           }
@@ -210,15 +211,15 @@ module.exports = {
           if(btn){
             tmpt=tmpt+`<article="flex1"><form>
             <p>
-              <input type="button" value="사용" onclick="uses(${list2[0]['user_number']},${list[0]['eq_number']});">
-              <input type="button" value="취소" onclick="back_board();">
+              <input class="btn1" type="button" value="사용" onclick="uses(${list2[0]['user_number']},${list[0]['eq_number']});">
+              <input class="btn1" type="button" value="취소" onclick="back_board1();">
             </p>
             </form></article>`;
           }
           else{ //in_use 상태
             tmpt=tmpt+`<article="flex1"><form>
             <p>
-              <input type="button" value="취소" onclick="back_board();">
+              <input class="btn1" type="button" value="취소" onclick="back_board1();">
             </p>
             </form></article>`;
          }
@@ -234,7 +235,7 @@ module.exports = {
       expd='gif';
     }
     // console.log(expd);
-    tmpt=tmpt+`<caption>사용자 프로필</caption>`
+    tmpt=tmpt+``
     +`<tr><td rowspan="5" id="img"><img src="../pic/${list[0]['user_number']}.${expd}" width="100" height="110" alt="이미지를 등록하세요"></td><td>사용자명   : ${list[0]['userName']}</td></tr>`
     +`<tr><td>사용자번호 : ${list[0]['user_number']}</td></tr><tr><td>등급 : ${list[0]['user_RANK']}</td></tr>`;
     var stat = list[0]['status'];
@@ -259,7 +260,7 @@ module.exports = {
       if(stat=='sanctioned'){
         tmpt=tmpt+`<p class="notice">사용 불가한 기능입니다.</p>`;
       }else{
-        tmpt=tmpt+`<input type="button" id="qqr" value="출입 QR 코드 생성" onclick="gen_qr('pass',120);"><br>`;
+        tmpt=tmpt+`<input class="btn1" type="button" id="qqr" value="출입 QR 코드 생성" onclick="gen_qr('pass',120);"><br>`;
       }
     }else{
       tmpt=tmpt+`<p class="notice">사용 불가한 기능입니다.</p>`;
@@ -269,7 +270,17 @@ module.exports = {
     
 
     return tmpt;
-  },cal_date(date1,date2){
-
+  },cr_log_list(list){
+    var tmpt='<p style="color:white;font-weight:bold;">최근 기자재 사용 기록</p><table class ="log_table" style="border-top: 1px solid white;">'
+    +`<tr><th>기록 날짜</th><th>사용자 번호</th><th>기자재 번호</th><th>사용 유형</th><th>상세보기</th></tr>`;
+    for(var i=0;i<list.length;i++){
+      tmpt= tmpt+`<tr><td>${list[i].log_date}</td>`;
+      tmpt= tmpt+`<td>${list[i].user_user_number}</td>`;
+      tmpt= tmpt+`<td>${list[i].equipment_eq_number}</td>`;
+      tmpt= tmpt+`<td>${list[i].log_case}</td>`;
+      tmpt= tmpt+`<td> <input type="button" id="log${i}" value="링크" onclick="popup('${list[i].log_file}')"></td></tr>`;
+    }
+    tmpt=tmpt+`</table>`;
+    return tmpt;
   }
 }

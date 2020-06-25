@@ -31,13 +31,13 @@ module.exports = function (passport) {
           <p><input type="text" name="id" placeholder="ID 입력" value=""></p>
           <p><input type="password" name="pwd" placeholder="password" value=""></p>
           <p>
-            <input type="submit" value="login">
+            <input type="submit" value="로그인">
           </p>
-          <p>
+          <!--<p>
             <a class="option" href = "/auth/login/find_id">아이디 찾기</a>&nbsp;
             <a class="option" href = "/auth/login/find_pw">비밀번호 찾기</a>&nbsp;
             <a class="option" href = "/auth/login/signin">회원가입</a>
-          </p>
+          </p>-->
           <div id="fdb_msg" style="color:red;">${feedback}</div>
         </form>
       `,'/');
@@ -48,13 +48,13 @@ module.exports = function (passport) {
           <p><input type="text" name="id" placeholder="ID 입력" value=""></p>
           <p><input type="password" name="pwd" placeholder="password" value=""></p>
           <p>
-            <input type="submit" value="login">
+            <input type="submit" value="로그인">
           </p>
-          <p>
+          <!--<p>
             <a class="option" href = "/auth/login/find_id">아이디 찾기</a>&nbsp;
             <a class="option" href = "/auth/login/find_pw">비밀번호 찾기</a>&nbsp;
             <a class="option" href = "/auth/login/signin">회원가입</a>
-          </p>
+          </p>-->
           <div id="fdb_msg" style="color:red;">${feedback}</div>
         </form>
       `,'/');
